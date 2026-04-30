@@ -1,0 +1,26 @@
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# output / test artifacts
+*.zip
+*.fidelity.json
+*.fidelity.json.gz
+_archive/
+_artifacts/
+_plans/
+_0/
+
+# node (if ever needed)
+node_modules/
+npm-debug.log*
+
+# env
+.env
+.env.*
+!.env.example

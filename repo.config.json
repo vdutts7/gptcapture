@@ -1,0 +1,12 @@
+{
+  "name": "gptcapture",
+  "description": "Export your ChatGPT chat data from chatgpt.com - canonical API URL helper and React Router fidelity capture",
+  "author": "vdutts7",
+  "url": "https://github.com/vdutts7/gptcapture",
+  "site": "https://vd7.io/projects",
+  "topics": ["chatgpt", "openai", "browserscript", "bookmarklet", "data-export", "api"],
+  "remote": {
+    "prefer": "ssh",
+    "origin_url": "git@github.com:vdutts7/gptcapture.git"
+  }
+}
