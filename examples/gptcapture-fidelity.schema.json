@@ -1,0 +1,39 @@
+{
+  "_exporter": "gptcapture-fidelity",
+  "_exported_at": "****",
+  "_source_url": "https://chatgpt.com/c/****",
+  "_route_key": "****",
+  "_rows": 0,
+  "_mapping_nodes": 0,
+  "table": ["****", "..."],
+  "loaderData": {
+    "loaderData": {
+      "root": {
+        "dd": {
+          "traceId": "****",
+          "traceTime": "****"
+        }
+      },
+      "routes/_conversation": {
+        "prefetchSearchPromises": "****"
+      }
+    },
+    "actionData": "****",
+    "errors": "****"
+  },
+  "serverResponseData": {
+    "title": "****",
+    "conversation_id": "****",
+    "mapping": {
+      "<node-uuid>": {
+        "id": "****",
+        "message": {
+          "author": { "role": "assistant" },
+          "content": { "content_type": "text", "parts": ["****"] }
+        },
+        "parent": "****",
+        "children": ["****"]
+      }
+    }
+  }
+}
