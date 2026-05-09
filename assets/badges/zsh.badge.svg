@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="69" height="34" viewBox="0 0 69 34" role="img" aria-label="zsh">
+  <defs>
+    <linearGradient id="glass-pill-qq7mwiqt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.78)"/>
+      <stop offset="100%" stop-color="rgba(236,240,245,0.72)"/>
+    </linearGradient>
+    <linearGradient id="glass-gloss-trlooz0b" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.58)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.00)"/>
+    </linearGradient>
+    <linearGradient id="glass-icon-shade-9qcgjj3b" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.55)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.25)"/>
+    </linearGradient>
+    <clipPath id="glass-icon-clip-91kenozy">
+      <rect x="8" y="9" width="16" height="16" rx="4.5" ry="4.5"/>
+    </clipPath>
+  </defs>
+  <g>
+    <rect x="0.75" y="0.75" width="67.5" height="32.5" rx="17" fill="none" stroke="rgba(15,23,42,0.20)" stroke-width="2.2"/>
+    <rect x="0.75" y="0.75" width="67.5" height="32.5" rx="17" fill="none" stroke="rgba(255,255,255,0.30)" stroke-width="0.8"/>
+    <rect x="0.75" y="0.75" width="67.5" height="32.5" rx="17" fill="url(#glass-pill-qq7mwiqt)" stroke="rgba(120,130,145,0.45)" stroke-width="1.5"/>
+    <rect x="1.5" y="1.5" width="66" height="16" rx="16" fill="url(#glass-gloss-trlooz0b)"/>
+    <rect x="1.5" y="1.5" width="66" height="31" rx="16" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1"/>
+    <rect x="8.55" y="9.65" width="16.5" height="16.5" rx="4.5" ry="4.5" fill="rgba(15,23,42,0.22)"/>
+    <rect x="7.75" y="8.75" width="16.5" height="16.5" rx="4.5" ry="4.5" fill="url(#glass-icon-shade-9qcgjj3b)" stroke="rgba(148,163,184,0.55)" stroke-width="0.75"/>
+    <image x="8" y="9" width="16" height="16" clip-path="url(#glass-icon-clip-91kenozy)" href="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRjE1QTI0IiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+WnNoPC90aXRsZT48cGF0aCBkPSJNMTEuNDE1IDUuMDM4YS41OC41OCAwIDAgMC0uNTQzLjE5N0wuMTM1IDE4LjAyMWEuNTguNTggMCAwIDAgLjA3MS44MTQuNTguNTggMCAwIDAgLjgxNS0uMDdMMTEuNzU3IDUuOTc5YS41OC41OCAwIDAgMC0uMDctLjgxNS42LjYgMCAwIDAtLjI3Mi0uMTI2bS04LjExMy4zMTdhMy4xMzMgMy4xMzMgMCAwIDAtMy4xMiAzLjEyIDMuMTMgMy4xMyAwIDAgMCAzLjEyIDMuMTE5QTMuMTMzIDMuMTMzIDAgMCAwIDYuNDIgOC40NzVhMy4xMyAzLjEzIDAgMCAwLTMuMTE5LTMuMTE5bTAgMS44MDZhMS4zIDEuMyAwIDAgMSAxLjMxNCAxLjMxMyAxLjMgMS4zIDAgMCAxLTEuMzE0IDEuMzEyQTEuMyAxLjMgMCAwIDEgMS45OSA4LjQ3NWExLjMgMS4zIDAgMCAxIDEuMzEyLTEuMzE0bTUuMjUzIDUuMjUzYTMuMTMgMy4xMyAwIDAgMC0zLjExOSAzLjExOSAzLjEzIDMuMTMgMCAwIDAgMy4xMiAzLjExOCAzLjEzMyAzLjEzMyAwIDAgMCAzLjExOC0zLjEyIDMuMTMzIDMuMTMzIDAgMCAwLTMuMTE5LTMuMTE4bTAgMS44MDVhMS4zIDEuMyAwIDAgMSAxLjMxMyAxLjMxNGMwIC43MzUtLjU3NyAxLjMxMi0xLjMxMiAxLjMxMmExLjMgMS4zIDAgMCAxLTEuMzE0LTEuMzEyIDEuMyAxLjMgMCAwIDEgMS4zMTMtMS4zMTRtNy4yMDEgMy4yNzZhLjU4LjU4IDAgMCAwLS41NzguNTc4LjU4LjU4IDAgMCAwIC41NzguNTc4aDcuNjY2YS41OC41OCAwIDAgMCAuNTc5LS41NzguNTguNTggMCAwIDAtLjU3OS0uNTc4WiIvPjwvc3ZnPg=="/>
+    <text x="31" y="21.8" fill="rgba(255,255,255,0.42)" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="8.5" font-weight="500" letter-spacing="0.1">zsh</text>
+    <text x="31" y="21" fill="#111827" stroke="rgba(255,255,255,0.16)" stroke-width="0.35" paint-order="stroke fill" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="8.5" font-weight="500" letter-spacing="0.1">zsh</text>
+  </g>
+</svg>
