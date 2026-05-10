@@ -2,36 +2,63 @@
   <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/chatgpt.webp" alt="chatgpt" width="80" height="80" />
 </p>
 <h1 align="center">gptcapture</h1>
-<p align="center">Export your ChatGPT chat data from <a href="https://chatgpt.com">chatgpt.com</a></p>
+<p align="center">Export ChatGPT chat data from <a href="https://chatgpt.com">chatgpt.com</a></p>
 
 ---
 
-## Which tool
+## Issue
 
-| | scope | run from | output |
-|---|---|---|---|
-| `gptcanonical.sh` | one chat | terminal | copies canonical API URL to clipboard |
-| `gptcapture.js` | one chat | DevTools console | gzipped React Router fidelity dump |
+**Basic ChatGPT settings export my data is broken ❌**:
 
-`gptcanonical` hits the server-side conversation API - full message tree, metadata, hidden system turns, tool payloads. `gptcapture` rips the live page's React Router stream table - different data source, preserves loader hydration state.
+- settings export broken (`ChatGPT` > `Settings` > `Data controls` > `Export data`)
+  - minimal, missing fields
+  - artificially diluted
+  - basically useless
 
-Canonical API URL:
-```
-https://chatgpt.com/backend-api/conversation/{CONVERSATION_ID}
-```
+**"Just copy-paste from browser bro"**:
 
-## Why not naive copy/paste?
+- no; multiple failure modes of `Cmd+A`, `Cmd+C`:
+  - ❌ format broken immediately:
+    - LLM messages canonical markdown- stored with ` ```markdown ` fence; copy-paste -> plaintext i.e. ` ```text `
+    - bold/italic/special formatting (like **example** / *example*) -> plaintext
+    - user + ai messages blob into one garbled monologue, not a conversation
+    - HTML/JS noise- headers, footers, ui components, labels in output
+    - code present -> critical detail loss i.e. missing backticks, newline chars
+      - reformatting waste -> error surface expands
+  - ❌ react SPA dynamic rendering = page hiding what you copy:
+    - DOM is react paint over loader/api `mapping` tree, not conversation store
+      - copy-paste reads mounted snapshot only- no tree, metadata, hidden turns
+    - hydration async; still streaming
+      - grab too early -> partial thread; mid-token answer in clipboard
+    - virtualized scroll- off-screen messages unmounted from DOM (the "hiding")
+      - thread longer than 4 messages -> immediate message loss
+  - ❌ semantic payload missing = rendered transcript only:
+    - clipboard is painted chat text- not canonical `mapping` json (see `examples/gptcanonical.schema.json`)
+    - thread-level fields gone
+      - `moderation_results`, `safe_urls`, `default_model_slug`
+      - `is_archived`, `is_temporary_chat`, timestamps, `conversation_id`
+    - tree structure gone
+      - `parent`/`children` links- branch edits, regeneration siblings, alternate paths
+      - system/tool turns that never render as user-visible bubbles
+    - per-message fields gone
+      - `content_type` + `parts[]` beyond final markdown i.e. code, tool payloads, non-text blocks
+      - `status`, `end_turn`, `author.role`, `author.metadata`
+      - `metadata.message_type`, `request_id`, other node metadata
+    - thinking/reasoning/collapsed blocks
+      - UI may hide entirely; copy-paste never sees them even when canonical json has the turn
+    - moderation/safety state
+      - flagged, restricted, censored signals live in json metadata- not in plaintext rip
 
-Browser extensions and "save as markdown" flows usually DOM-scrape the visible page. That baseline is weak:
+> see `examples/naive-dom-rip.stub.md` for sample
 
-- sidebar, nav, chat history, and profile chrome get mixed into the export
-- code fences break (`Bash` label instead of a proper fence)
-- only rendered text survives - no message tree, metadata, or hidden turns
-- virtualized scroll means off-screen messages may be missing entirely
+> `gptcanonical` + `gptcapture` bypass DOM- pull from loaders/API
 
-See `examples/naive-dom-rip.stub.md` for a redacted sample of what that looks like.
+## Two options
 
-`gptcanonical` and `gptcapture` bypass the rendered DOM and pull structured data from ChatGPT's own loaders/API.
+| | scope | purpose | output | details |
+|---|---|---|---|---|
+| `gptcanonical.sh` | one chat | canonical url helper | chat url -> API url -> browser paste -> json | `https://chatgpt.com/backend-api/conversation/{CONVERSATION_ID}` |
+| `gptcapture.js` | one chat | browserscript | gzipped React Router download | |
 
 ## Setup
 
@@ -39,37 +66,34 @@ See `examples/naive-dom-rip.stub.md` for a redacted sample of what that looks li
 chmod +x gptcanonical.sh
 ```
 
-Optional shell helper (source or add to your shell rc):
+Prereqs:
 
-```bash
-source ./gptcanonical.sh   # defines gptcanonical()
-```
-
-No API keys or org UUIDs required. You must be logged into chatgpt.com in the browser; session cookies gate the canonical URL.
+- logged into chatgpt.com in same browser where you enter new link
+> session cookies gate canonical url
+> API keys do NOT work
 
 ## Usage
 
-**`gptcanonical.sh`** - copies canonical URL to clipboard. Paste in address bar while logged in.
+**`gptcanonical.sh`**- copies canonical URL to clipboard; paste in address bar while logged in
 ```bash
 ./gptcanonical.sh <chat-id-or-url>
-./gptcanonical.sh                    # reads clipboard via pbpaste
+./gptcanonical.sh                    # clipboard via pbpaste
 ```
 
-**`gptcapture.js`** - paste in DevTools console on a chat page (`https://chatgpt.com/c/...`). Downloads `{title}.fidelity.json.gz`.
+**`gptcapture.js`**- paste in DevTools on chat page (`https://chatgpt.com/c/...`); downloads `{title}.fidelity.json.gz`
 
 ```js
-// DevTools → Console → paste contents of gptcapture.js
-// result also available as window.__GPTCAPTURE
+// DevTools → Console → paste gptcapture.js
+// also on window.__GPTCAPTURE
 ```
 
-Decompress:
 ```bash
 gunzip -k conversation.fidelity.json.gz
 ```
 
 ## Output shapes
 
-Stub schemas (values redacted with `****`):
+stub schemas (`****` redacted):
 
 | method | example schema |
 |---|---|
@@ -77,17 +101,29 @@ Stub schemas (values redacted with `****`):
 | gptcanonical | `examples/gptcanonical.schema.json` |
 | gptcapture | `examples/gptcapture-fidelity.schema.json` |
 
-**gptcanonical** returns the conversation object directly: `title`, timestamps, `conversation_id`, and a `mapping` tree of message nodes with `author`, `content.parts`, `metadata`, parent/child links.
+**`gptcanonical`**- Conversation object:
+  - `title`, timestamps, `conversation_id`
+  - `mapping` tree- `author`, `content.parts`, `metadata`, parent/child links
 
-**gptcapture** wraps the React Router dehydrated table plus hydrated `loaderData`. When the conversation route resolves, `serverResponseData` mirrors the canonical mapping. The `table` array is the raw stream indices - useful for debugging loader hydration, not for reading messages directly.
+**`gptcapture`**- Router dump:
+  - dehydrated table + hydrated `loaderData`
+  - `serverResponseData` mirrors canonical `mapping` when route resolves
+  - `table` = raw stream indices- debug hydration only, not for reading messages
 
 ## Gotchas
 
-- **Session cookies expire.** Refresh chatgpt.com if the canonical URL returns 401.
-- **Paste the canonical URL in the same browser session** where you are logged in. It is not a public API endpoint.
-- **Fidelity export depends on the stream script.** If ChatGPT changes their React Router bootstrap, `gptcapture.js` may need an update.
-- **`_mapping_nodes: 0`** in a fidelity file usually means the conversation loader had not hydrated mapping yet - reload the chat and re-run.
+- runtime traps:
+  - session cookies expire- refresh chatgpt.com on 401
+  - paste canonical URL same logged-in browser- not public API
+  - fidelity export depends on stream script- may break if ChatGPT changes bootstrap
+  - `_mapping_nodes: 0`- mapping not hydrated yet; reload and re-run
+
+## Next steps
+
+- [ ] browser extension- native canonical url access via host permissions + cookies
+  - skips hydration + manual copy-paste dance
 
 ## Contact
 
-<a href="https://vd7.io"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773910810/readme-badges/readme-badge-vd7.png" alt="vd7.io" height="40" /></a> &nbsp; <a href="https://x.com/vdutts7"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773910817/readme-badges/readme-badge-x.png" alt="/vdutts7" height="40" /></a>
+<a href="https://vd7.io"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773910810/readme-badges/readme-badge-vd7.png" alt="vd7.io" height="40" /></a>
+<a href="https://x.com/vdutts7"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773910817/readme-badges/readme-badge-x.png" alt="/vdutts7" height="40" /></a>
