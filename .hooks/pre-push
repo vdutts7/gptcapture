@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Gate push behind Touch ID (AI agents cannot bypass).
+set -eo pipefail
+
+if ! command -v shelllock &>/dev/null; then
+  echo "🪝 pre-push: BLOCKED — shelllock is required but not installed"
+  exit 1
+fi
+
+if [[ "${SHELLLOCK_VERIFIED:-}" != "1" ]]; then
+  shelllock -m "Push to remote?" true || {
+    echo "🪝 pre-push: BLOCKED — Touch ID denied"
+    exit 1
+  }
+fi
+
+echo "🪝 pre-push: shelllock verified"
+
+exit 0
