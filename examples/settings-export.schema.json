@@ -1,0 +1,25 @@
+{
+  "title": "summer roadtrip notes",
+  "create_time": 1718058123.442,
+  "update_time": 1718061044.118,
+  "mapping": {
+    "8f3a2b1c-9d4e-4a71-b2e6-9d1a5f803c42": {
+      "message": {
+        "author": { "role": "user" },
+        "content": {
+          "parts": ["outline the PCH drive SF to LA- one tank stop max"]
+        }
+      }
+    },
+    "f9e8d7c6-b5a4-3210-fedc-ba0987654321": {
+      "message": {
+        "author": { "role": "assistant" },
+        "content": {
+          "parts": [
+            "Here is the only fuel stop I'd use:\n\n| segment | stop |\n|---|---|\n| SF to Cambria | Morro Bay Chevron |\n\nQuick check:\n\ncurl -s 'https://maps.example.com/pch/leg?from=37.77&to=34.05'"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -2,9 +2,106 @@
   <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/chatgpt.webp" alt="chatgpt" width="80" height="80" />
 </p>
 <h1 align="center">gptcapture</h1>
-<p align="center">Export ChatGPT chat data from <a href="https://chatgpt.com">chatgpt.com</a></p>
+<p align="center">Export your ChatGPT chat data from <a href="https://chatgpt.com">chatgpt.com</a></p>
 
 ---
+
+<p align="center"><strong>same chat · one exchange · three skeletons</strong></p>
+
+[`examples/settings-export.schema.json`](examples/settings-export.schema.json)
+
+```json
+{
+  "title": "summer roadtrip notes",
+  "mapping": {
+    "8f3a2b1c-9d4e-4a71-b2e6-9d1a5f803c42": {
+      "message": {
+        "author": { "role": "user" },
+        "content": { "parts": ["outline the PCH drive SF to LA- one tank stop max"] }
+      }
+    },
+    "f9e8d7c6-b5a4-3210-fedc-ba0987654321": {
+      "message": {
+        "author": { "role": "assistant" },
+        "content": {
+          "parts": [
+            "Here is the only fuel stop I'd use:\\n\\n| segment | stop |\\n|---|---|\\n| SF to Cambria | Morro Bay Chevron |\\n\\nQuick check:\\n\\ncurl -s 'https://maps.example.com/pch/leg?from=37.77&to=34.05'"
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+[`examples/naive-dom-rip.one-turn.md`](examples/naive-dom-rip.one-turn.md)
+
+```text
+[Skip to content]
+
+Search chats · Recents · Share
+
+#### You said:
+
+outline the PCH drive SF to LA- one tank stop max
+
+#### ChatGPT said:
+
+Here is the only fuel stop I'd use:
+
+| segment | stop |
+|---|---|
+| SF → Cambria | Morro Bay Chevron |
+
+Quick check:
+
+curl -s 'https://maps.example.com/pch/leg?from=37.77&to=34.05'
+
+Bash
+
+Copy
+
+Regenerate
+```
+
+[`examples/gptcanonical.one-turn.json`](examples/gptcanonical.one-turn.json)
+
+```json
+{
+  "conversation_id": "7k2m9p4n-a8f3-4c71-b2e6-9d1a5f803c42",
+  "moderation_results": [],
+  "safe_urls": ["https://maps.example.com/pch/leg?from=37.77&to=34.05"],
+  "mapping": {
+    "8f3a2b1c-9d4e-4a71-b2e6-9d1a5f803c42": {
+      "parent": "00000000-0000-0000-0000-000000000000",
+      "children": ["f9e8d7c6-b5a4-3210-fedc-ba0987654321"],
+      "message": {
+        "author": { "role": "user" },
+        "content": {
+          "content_type": "text",
+          "parts": ["outline the PCH drive **SF to LA**- one tank stop max"]
+        },
+        "metadata": { "request_id": "req_6h2k8m4p1q", "message_type": "next" }
+      }
+    },
+    "f9e8d7c6-b5a4-3210-fedc-ba0987654321": {
+      "parent": "8f3a2b1c-9d4e-4a71-b2e6-9d1a5f803c42",
+      "message": {
+        "author": { "role": "assistant" },
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Here is the **only** fuel stop I'd use:\\n\\n```markdown\\n| segment | stop |\\n|---|---|\\n| SF → Cambria | Morro Bay Chevron |\\n```\\n\\nQuick check:\\n\\n```bash\\ncurl -s 'https://maps.example.com/pch/leg?from=37.77&to=34.05'\\n```"
+          ]
+        },
+        "status": "finished_successfully",
+        "end_turn": true,
+        "metadata": { "model_slug": "gpt-4o" }
+      }
+    }
+  }
+}
+```
 
 ## Issue
 
@@ -17,7 +114,8 @@
 
 **"Just copy-paste from browser bro"**:
 
-- no; multiple failure modes of `Cmd+A`, `Cmd+C`:
+- no
+- multiple failure modes of `Cmd+A`, `Cmd+C`:
   - ❌ format broken immediately:
     - LLM messages canonical markdown- stored with ` ```markdown ` fence; copy-paste -> plaintext i.e. ` ```text `
     - bold/italic/special formatting (like **example** / *example*) -> plaintext
@@ -27,7 +125,7 @@
       - reformatting waste -> error surface expands
   - ❌ react SPA dynamic rendering = page hiding what you copy:
     - DOM is react paint over loader/api `mapping` tree, not conversation store
-      - copy-paste reads mounted snapshot only- no tree, metadata, hidden turns
+      - copy-paste reads mounted snapshot only- no tree, no metadata, no hidden turns
     - hydration async; still streaming
       - grab too early -> partial thread; mid-token answer in clipboard
     - virtualized scroll- off-screen messages unmounted from DOM (the "hiding")
@@ -55,10 +153,12 @@
 
 ## Two options
 
-| | scope | purpose | output | details |
-|---|---|---|---|---|
-| `gptcanonical.sh` | one chat | canonical url helper | chat url -> API url -> browser paste -> json | `https://chatgpt.com/backend-api/conversation/{CONVERSATION_ID}` |
-| `gptcapture.js` | one chat | browserscript | gzipped React Router download | |
+| path | tool | flow | output |
+|---|---|---|---|
+| A | `gptcanonical.sh` | chat url → backend-api url → paste in logged-in browser | canonical API json |
+| B | `gptcapture.js` | run on open chat page | `summer-roadtrip-notes.fidelity.json.gz` (router dump) |
+
+backend-api shape: `https://chatgpt.com/backend-api/conversation/7k2m9p4n-a8f3-4c71-b2e6-9d1a5f803c42`
 
 ## Setup
 
@@ -68,55 +168,65 @@ chmod +x gptcanonical.sh
 
 Prereqs:
 
-- logged into chatgpt.com in same browser where you enter new link
-> session cookies gate canonical url
-> API keys do NOT work
+- logged into `https://chatgpt.com` in same browser where you enter new url
+> why? session cookies gate canonical url
+> note: API keys do NOT work here
 
 ## Usage
 
-**`gptcanonical.sh`**- copies canonical URL to clipboard; paste in address bar while logged in
+| path | do this | get this |
+|---|---|---|
+| A | run `gptcanonical.sh` with chat url | json from canonical API (paste backend url in logged-in browser) |
+| B | run `gptcapture.js` on chat page | gzipped fidelity export, then gunzip |
+
+### Path A · `gptcanonical.sh`
+
 ```bash
-./gptcanonical.sh <chat-id-or-url>
-./gptcanonical.sh                    # clipboard via pbpaste
+# chat url → script prints backend-api url → paste in browser → json
+./gptcanonical.sh https://chatgpt.com/c/7k2m9p4n-a8f3-4c71-b2e6-9d1a5f803c42
 ```
 
-**`gptcapture.js`**- paste in DevTools on chat page (`https://chatgpt.com/c/...`); downloads `{title}.fidelity.json.gz`
+### Path B · `gptcapture.js`
 
 ```js
-// DevTools → Console → paste gptcapture.js
-// also on window.__GPTCAPTURE
+// on chat page https://chatgpt.com/c/3b8e1f6a-92d4-4c05-8f17-6a2e9d704b51
+// auto-downloads summer-roadtrip-notes.fidelity.json.gz
 ```
 
 ```bash
-gunzip -k conversation.fidelity.json.gz
+gunzip -k summer-roadtrip-notes.fidelity.json.gz
 ```
 
 ## Output shapes
 
-stub schemas (`****` redacted):
-
-| method | example schema |
+| method | example |
 |---|---|
-| naive DOM rip | `examples/naive-dom-rip.stub.md` |
-| gptcanonical | `examples/gptcanonical.schema.json` |
-| gptcapture | `examples/gptcapture-fidelity.schema.json` |
+| settings export (one turn) | `examples/settings-export.schema.json` |
+| naive DOM rip (one turn) | `examples/naive-dom-rip.one-turn.md` |
+| gptcanonical (one turn) | `examples/gptcanonical.one-turn.json` |
+| naive DOM rip (full) | `examples/naive-dom-rip.stub.md` |
+| gptcanonical (full) | `examples/gptcanonical.schema.json` |
+| gptcapture (full) | `examples/gptcapture-fidelity.schema.json` |
 
 **`gptcanonical`**- Conversation object:
   - `title`, timestamps, `conversation_id`
   - `mapping` tree- `author`, `content.parts`, `metadata`, parent/child links
 
 **`gptcapture`**- Router dump:
-  - dehydrated table + hydrated `loaderData`
+  - `table`:
+    - dehydrated export layer
+    - key = raw stream indices- debug hydration only; not for reading messages
+  - hydrated `loaderData`
   - `serverResponseData` mirrors canonical `mapping` when route resolves
-  - `table` = raw stream indices- debug hydration only, not for reading messages
 
 ## Gotchas
 
-- runtime traps:
-  - session cookies expire- refresh chatgpt.com on 401
-  - paste canonical URL same logged-in browser- not public API
-  - fidelity export depends on stream script- may break if ChatGPT changes bootstrap
-  - `_mapping_nodes: 0`- mapping not hydrated yet; reload and re-run
+| issue | fix | stability | why |
+|---|---|---|---|
+| session cookies expire | refresh `chatgpt.com`; retry on 401 | 7/10 | normal session churn; manual refresh works |
+| canonical URL needs auth | paste in same logged-in browser- not public API | 8/10 | by design; fails logged out or wrong profile |
+| `gptcapture.js` parses inline stream script | may break if ChatGPT changes bootstrap | 4/10 | scrapes page internals- no stable contract |
+| `_mapping_nodes: 0` | reload chat; re-run after hydration | 6/10 | race with async loader; retry usually works |
 
 ## Next steps
 

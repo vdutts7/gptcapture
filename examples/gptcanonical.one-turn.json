@@ -1,0 +1,59 @@
+{
+  "title": "summer roadtrip notes",
+  "create_time": 1718058123.442,
+  "update_time": 1718061044.118,
+  "conversation_id": "7k2m9p4n-a8f3-4c71-b2e6-9d1a5f803c42",
+  "default_model_slug": "gpt-4o",
+  "is_archived": false,
+  "is_temporary_chat": false,
+  "moderation_results": [],
+  "safe_urls": ["https://maps.example.com/pch/leg?from=37.77&to=34.05"],
+  "mapping": {
+    "00000000-0000-0000-0000-000000000000": {
+      "id": "00000000-0000-0000-0000-000000000000",
+      "children": ["8f3a2b1c-9d4e-4a71-b2e6-9d1a5f803c42"],
+      "message": null
+    },
+    "8f3a2b1c-9d4e-4a71-b2e6-9d1a5f803c42": {
+      "id": "8f3a2b1c-9d4e-4a71-b2e6-9d1a5f803c42",
+      "parent": "00000000-0000-0000-0000-000000000000",
+      "children": ["f9e8d7c6-b5a4-3210-fedc-ba0987654321"],
+      "message": {
+        "id": "msg_a1c9f2e8b4d7",
+        "author": { "role": "user", "name": null, "metadata": {} },
+        "content": {
+          "content_type": "text",
+          "parts": ["outline the PCH drive **SF to LA**- one tank stop max"]
+        },
+        "status": "finished_successfully",
+        "end_turn": null,
+        "metadata": {
+          "request_id": "req_6h2k8m4p1q",
+          "message_type": "next"
+        }
+      }
+    },
+    "f9e8d7c6-b5a4-3210-fedc-ba0987654321": {
+      "id": "f9e8d7c6-b5a4-3210-fedc-ba0987654321",
+      "parent": "8f3a2b1c-9d4e-4a71-b2e6-9d1a5f803c42",
+      "children": [],
+      "message": {
+        "id": "msg_b2d8e3f9c5a1",
+        "author": { "role": "assistant", "name": null, "metadata": {} },
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Here is the **only** fuel stop I'd use:\n\n```markdown\n| segment | stop |\n|---|---|\n| SF → Cambria | Morro Bay Chevron |\n| Cambria → LA | none (tank range) |\n```\n\nQuick check:\n\n```bash\ncurl -s 'https://maps.example.com/pch/leg?from=37.77&to=34.05'\n```"
+          ]
+        },
+        "status": "finished_successfully",
+        "end_turn": true,
+        "metadata": {
+          "request_id": "req_6h2k8m4p1q",
+          "message_type": "next",
+          "model_slug": "gpt-4o"
+        }
+      }
+    }
+  }
+}
