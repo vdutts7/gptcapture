@@ -6,9 +6,8 @@
 
 ---
 
-<p align="center"><strong>same chat · one exchange · three skeletons</strong></p>
-
-[`examples/settings-export.schema.json`](examples/settings-export.schema.json)
+**What ChatGPT export your data gives you:** 
+> [`examples/settings-export.schema.json`](examples/settings-export.schema.json)
 
 ```json
 {
@@ -34,7 +33,8 @@
 }
 ```
 
-[`examples/naive-dom-rip.one-turn.md`](examples/naive-dom-rip.one-turn.md)
+**Copy-paste from browser**:
+> [`examples/naive-dom-rip.one-turn.md`](examples/naive-dom-rip.one-turn.md)
 
 ```text
 [Skip to content]
@@ -64,7 +64,8 @@ Copy
 Regenerate
 ```
 
-[`examples/gptcanonical.one-turn.json`](examples/gptcanonical.one-turn.json)
+**This repo:**
+> [`examples/gptcanonical.one-turn.json`](examples/gptcanonical.one-turn.json)
 
 ```json
 {
@@ -105,7 +106,7 @@ Regenerate
 
 ## Issue
 
-**Basic ChatGPT settings export my data is broken ❌**:
+**Basic ChatGPT settings export your data is broken ❌**:
 
 - settings export broken (`ChatGPT` > `Settings` > `Data controls` > `Export data`)
   - minimal, missing fields
