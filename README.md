@@ -6,103 +6,25 @@
 
 ---
 
-**What ChatGPT export your data gives you:** 
-> [`examples/settings-export.schema.json`](examples/settings-export.schema.json)
-
-```json
-{
-  "title": "summer roadtrip notes",
-  "mapping": {
-    "8f3a2b1c-9d4e-4a71-b2e6-9d1a5f803c42": {
-      "message": {
-        "author": { "role": "user" },
-        "content": { "parts": ["outline the PCH drive SF to LA- one tank stop max"] }
-      }
-    },
-    "f9e8d7c6-b5a4-3210-fedc-ba0987654321": {
-      "message": {
-        "author": { "role": "assistant" },
-        "content": {
-          "parts": [
-            "Here is the only fuel stop I'd use:\\n\\n| segment | stop |\\n|---|---|\\n| SF to Cambria | Morro Bay Chevron |\\n\\nQuick check:\\n\\ncurl -s 'https://maps.example.com/pch/leg?from=37.77&to=34.05'"
-          ]
-        }
-      }
-    }
-  }
-}
-```
-
-**Copy-paste from browser**:
-> [`examples/naive-dom-rip.one-turn.md`](examples/naive-dom-rip.one-turn.md)
-
-```text
-[Skip to content]
-
-Search chats · Recents · Share
-
-#### You said:
-
-outline the PCH drive SF to LA- one tank stop max
-
-#### ChatGPT said:
-
-Here is the only fuel stop I'd use:
-
-| segment | stop |
-|---|---|
-| SF → Cambria | Morro Bay Chevron |
-
-Quick check:
-
-curl -s 'https://maps.example.com/pch/leg?from=37.77&to=34.05'
-
-Bash
-
-Copy
-
-Regenerate
-```
-
-**This repo:**
-> [`examples/gptcanonical.one-turn.json`](examples/gptcanonical.one-turn.json)
-
-```json
-{
-  "conversation_id": "7k2m9p4n-a8f3-4c71-b2e6-9d1a5f803c42",
-  "moderation_results": [],
-  "safe_urls": ["https://maps.example.com/pch/leg?from=37.77&to=34.05"],
-  "mapping": {
-    "8f3a2b1c-9d4e-4a71-b2e6-9d1a5f803c42": {
-      "parent": "00000000-0000-0000-0000-000000000000",
-      "children": ["f9e8d7c6-b5a4-3210-fedc-ba0987654321"],
-      "message": {
-        "author": { "role": "user" },
-        "content": {
-          "content_type": "text",
-          "parts": ["outline the PCH drive **SF to LA**- one tank stop max"]
-        },
-        "metadata": { "request_id": "req_6h2k8m4p1q", "message_type": "next" }
-      }
-    },
-    "f9e8d7c6-b5a4-3210-fedc-ba0987654321": {
-      "parent": "8f3a2b1c-9d4e-4a71-b2e6-9d1a5f803c42",
-      "message": {
-        "author": { "role": "assistant" },
-        "content": {
-          "content_type": "text",
-          "parts": [
-            "Here is the **only** fuel stop I'd use:\\n\\n```markdown\\n| segment | stop |\\n|---|---|\\n| SF → Cambria | Morro Bay Chevron |\\n```\\n\\nQuick check:\\n\\n```bash\\ncurl -s 'https://maps.example.com/pch/leg?from=37.77&to=34.05'\\n```"
-          ]
-        },
-        "status": "finished_successfully",
-        "end_turn": true,
-        "metadata": { "model_slug": "gpt-4o" }
-      }
-    }
-  }
-}
-```
+<table>
+  <tr>
+    <td valign="top" width="33%">
+      ❌ <strong>What ChatGPT export your data gives you:</strong><br/>
+      <a href="examples/settings-export.schema.json"><code>examples/settings-export.schema.json</code></a><br/>
+      <img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1781134527/gh-repos/gptcapture/gptcapture-eyecatcher-settings-export.png" alt="settings export skeleton" width="100%" />
+    </td>
+    <td valign="top" width="33%">
+      ❌ <strong>Copy-paste from browser:</strong><br/>
+      <a href="examples/naive-dom-rip.one-turn.md"><code>examples/naive-dom-rip.one-turn.md</code></a><br/>
+      <img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1781134526/gh-repos/gptcapture/gptcapture-eyecatcher-dom-rip.png" alt="naive DOM rip skeleton" width="100%" />
+    </td>
+    <td valign="top" width="33%">
+      ✅ <strong>This repo:</strong><br/>
+      <a href="examples/gptcanonical.one-turn.json"><code>examples/gptcanonical.one-turn.json</code></a><br/>
+      <img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1781134527/gh-repos/gptcapture/gptcapture-eyecatcher-canonical.png" alt="gptcanonical skeleton" width="100%" />
+    </td>
+  </tr>
+</table>
 
 ## Issue
 
