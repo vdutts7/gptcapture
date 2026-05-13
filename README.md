@@ -15,7 +15,7 @@
     </td>
     <td valign="top" width="33%">
       ❌ <strong>Copy-paste from browser:</strong><br/>
-      <a href="examples/naive-dom-rip.one-turn.md"><code>examples/naive-dom-rip.one-turn.md</code></a><br/>
+      <a href="examples/naive-dom-rip.one-turn.txt"><code>examples/naive-dom-rip.one-turn.txt</code></a><br/>
       <img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1781134526/gh-repos/gptcapture/gptcapture-eyecatcher-dom-rip.png" alt="naive DOM rip skeleton" width="100%" />
     </td>
     <td valign="top" width="33%">
@@ -70,18 +70,16 @@
     - moderation/safety state
       - flagged, restricted, censored signals live in json metadata- not in plaintext rip
 
-> see `examples/naive-dom-rip.stub.md` for sample
+> see `examples/naive-dom-rip.stub.txt` for sample
 
 > `gptcanonical` + `gptcapture` bypass DOM- pull from loaders/API
 
-## Two options
+## Solution
 
 | path | tool | flow | output |
 |---|---|---|---|
-| A | `gptcanonical.sh` | chat url → backend-api url → paste in logged-in browser | canonical API json |
+| A | `gptcanonical.sh` | chat url → backend-api url → paste in logged-in browser | canonical API json (`https://chatgpt.com/backend-api/conversation/7k2m9p4n-a8f3-4c71-b2e6-9d1a5f803c42`) |
 | B | `gptcapture.js` | run on open chat page | `summer-roadtrip-notes.fidelity.json.gz` (router dump) |
-
-backend-api shape: `https://chatgpt.com/backend-api/conversation/7k2m9p4n-a8f3-4c71-b2e6-9d1a5f803c42`
 
 ## Setup
 
@@ -125,9 +123,9 @@ gunzip -k summer-roadtrip-notes.fidelity.json.gz
 | method | example |
 |---|---|
 | settings export (one turn) | `examples/settings-export.schema.json` |
-| naive DOM rip (one turn) | `examples/naive-dom-rip.one-turn.md` |
+| naive DOM rip (one turn) | `examples/naive-dom-rip.one-turn.txt` |
 | gptcanonical (one turn) | `examples/gptcanonical.one-turn.json` |
-| naive DOM rip (full) | `examples/naive-dom-rip.stub.md` |
+| naive DOM rip (full) | `examples/naive-dom-rip.stub.txt` |
 | gptcanonical (full) | `examples/gptcanonical.schema.json` |
 | gptcapture (full) | `examples/gptcapture-fidelity.schema.json` |
 
