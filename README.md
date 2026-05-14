@@ -4,6 +4,8 @@
 <h1 align="center">gptcapture</h1>
 <p align="center">Export your ChatGPT chat data from <a href="https://chatgpt.com">chatgpt.com</a></p>
 
+> See also: [export your full Claude chat data](https://github.com/vdutts7/claudecapture/)
+
 ---
 
 <table>
