@@ -140,7 +140,7 @@ gunzip -k summer-roadtrip-notes.fidelity.json.gz
   - hydrated `loaderData`
   - `serverResponseData` mirrors canonical `mapping` when route resolves
 
-## Gotchas
+## ⚠️ Gotchas
 
 | issue | fix | stability | why |
 |---|---|---|---|
