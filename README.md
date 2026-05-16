@@ -37,7 +37,9 @@
   - artificially diluted
   - basically useless
 
-**"Just copy-paste from browser bro"**: no · multiple failure modes of `Cmd+A`, `Cmd+C`
+**"Just copy-paste from browser bro"**: 
+> no
+> multiple failure modes of `Cmd+A`, `Cmd+C`
 
 | cluster | issue | detail |
 |---|---|---|
