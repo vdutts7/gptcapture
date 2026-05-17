@@ -41,30 +41,30 @@
 > no
 > multiple failure modes of `Cmd+A`, `Cmd+C`
 
-| cluster | issue | detail |
+| failure | symptom | detail |
 |---|---|---|
 | ❌ format broken immediately | LLM markdown fences | stored with ` ```markdown `; copy-paste -> plaintext i.e. ` ```text ` |
-| ❌ format broken immediately | bold/italic/special formatting | like **example** / *example* -> plaintext |
-| ❌ format broken immediately | message blob | user + ai messages -> one garbled monologue, not a conversation |
-| ❌ format broken immediately | HTML/JS noise | headers, footers, ui components, labels in output |
-| ❌ format broken immediately | code detail loss | missing backticks, newline chars |
-| ❌ format broken immediately | reformatting waste | error surface expands |
+| | bold/italic/special formatting | like **example** / *example* -> plaintext |
+| | message blob | user + ai messages -> one garbled monologue, not a conversation |
+| | HTML/JS noise | headers, footers, ui components, labels in output |
+| | code detail loss | missing backticks, newline chars |
+| | reformatting waste | error surface expands |
 | ❌ react SPA dynamic rendering = page hiding what you copy | DOM vs store | react paint over loader/api `mapping` tree, not conversation store |
-| ❌ react SPA dynamic rendering = page hiding what you copy | mounted snapshot only | copy-paste reads DOM paint- no tree, no metadata, no hidden turns |
-| ❌ react SPA dynamic rendering = page hiding what you copy | hydration async | still streaming |
-| ❌ react SPA dynamic rendering = page hiding what you copy | grab too early | partial thread; mid-token answer in clipboard |
-| ❌ react SPA dynamic rendering = page hiding what you copy | virtualized scroll | off-screen messages unmounted from DOM (the "hiding") |
-| ❌ react SPA dynamic rendering = page hiding what you copy | long threads | thread longer than 4 messages -> immediate message loss |
+| | mounted snapshot only | copy-paste reads DOM paint- no tree, no metadata, no hidden turns |
+| | hydration async | still streaming |
+| | grab too early | partial thread; mid-token answer in clipboard |
+| | virtualized scroll | off-screen messages unmounted from DOM (the "hiding") |
+| | long threads | thread longer than 4 messages -> immediate message loss |
 | ❌ semantic payload missing = rendered transcript only | clipboard vs canonical | painted chat text- not canonical `mapping` json (see `examples/gptcanonical.schema.json`) |
-| ❌ semantic payload missing = rendered transcript only | thread-level fields gone | `moderation_results`, `safe_urls`, `default_model_slug` |
-| ❌ semantic payload missing = rendered transcript only | thread-level fields gone | `is_archived`, `is_temporary_chat`, timestamps, `conversation_id` |
-| ❌ semantic payload missing = rendered transcript only | tree structure gone | `parent`/`children` links- branch edits, regeneration siblings, alternate paths |
-| ❌ semantic payload missing = rendered transcript only | tree structure gone | system/tool turns that never render as user-visible bubbles |
-| ❌ semantic payload missing = rendered transcript only | per-message fields gone | `content_type` + `parts[]` beyond final markdown i.e. code, tool payloads, non-text blocks |
-| ❌ semantic payload missing = rendered transcript only | per-message fields gone | `status`, `end_turn`, `author.role`, `author.metadata` |
-| ❌ semantic payload missing = rendered transcript only | per-message fields gone | `metadata.message_type`, `request_id`, other node metadata |
-| ❌ semantic payload missing = rendered transcript only | thinking/reasoning/collapsed blocks | UI may hide entirely; copy-paste never sees them even when canonical json has the turn |
-| ❌ semantic payload missing = rendered transcript only | moderation/safety state | flagged, restricted, censored signals live in json metadata- not in plaintext rip |
+| | thread-level fields gone | `moderation_results`, `safe_urls`, `default_model_slug` |
+| | | `is_archived`, `is_temporary_chat`, timestamps, `conversation_id` |
+| | tree structure gone | `parent`/`children` links- branch edits, regeneration siblings, alternate paths |
+| | | system/tool turns that never render as user-visible bubbles |
+| | per-message fields gone | `content_type` + `parts[]` beyond final markdown i.e. code, tool payloads, non-text blocks |
+| | | `status`, `end_turn`, `author.role`, `author.metadata` |
+| | | `metadata.message_type`, `request_id`, other node metadata |
+| | thinking/reasoning/collapsed blocks | UI may hide entirely; copy-paste never sees them even when canonical json has the turn |
+| | moderation/safety state | flagged, restricted, censored signals live in json metadata- not in plaintext rip |
 
 > see `examples/naive-dom-rip.stub.txt` for sample
 
@@ -85,8 +85,9 @@ chmod +x gptcanonical.sh
 
 Prereqs:
 
-- logged into `https://chatgpt.com` in same browser where you enter new url
+- [ ] logged into `https://chatgpt.com` in same browser where you enter new url
 > why? session cookies gate canonical url
+
 > note: API keys do NOT work here
 
 ## Usage
@@ -138,7 +139,7 @@ gunzip -k summer-roadtrip-notes.fidelity.json.gz
 
 ## ⚠️ Gotchas
 
-| issue | fix | stability | why |
+| problem | fix | stability | why |
 |---|---|---|---|
 | session cookies expire | refresh `chatgpt.com`; retry on 401 | 7/10 | normal session churn; manual refresh works |
 | canonical URL needs auth | paste in same logged-in browser- not public API | 8/10 | by design; fails logged out or wrong profile |
