@@ -1,0 +1,37 @@
+{
+  "title": "****",
+  "create_time": "****",
+  "update_time": "****",
+  "conversation_id": "****",
+  "default_model_slug": "****",
+  "is_archived": false,
+  "is_temporary_chat": false,
+  "moderation_results": [],
+  "safe_urls": ["****"],
+  "mapping": {
+    "<node-uuid>": {
+      "id": "****",
+      "message": {
+        "id": "****",
+        "author": {
+          "role": "user",
+          "name": "****",
+          "metadata": {}
+        },
+        "content": {
+          "content_type": "text",
+          "parts": ["****"]
+        },
+        "status": "****",
+        "end_turn": true,
+        "metadata": {
+          "request_id": "****",
+          "message_type": "****"
+        }
+      },
+      "parent": "****",
+      "children": ["****"]
+    },
+    "...": "****"
+  }
+}

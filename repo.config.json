@@ -1,48 +1,12 @@
 {
-  "repo": {
-    "name": "PROJECT_NAME",
-    "description": "One-liner description",
-    "username": "vdutts7",
-    "homepage": "",
-    "topics": []
-  },
-  "access_control": {
-    "_description": "Optional owner and token for repo automation scripts.",
-    "owner": "$REPO_OWNER",
-    "token": "$REPO_TOKEN"
-  },
-  "social_preview": {
-    "title": "PROJECT_NAME",
-    "icons_dir": "assets/icons",
-    "icon_creator": "https://vd7.dev/icon-creator",
-    "dimensions": {
-      "width": 1280,
-      "height": 640
-    }
-  },
-  "cloudinary": {
-    "_note": "Reads from env vars: CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET",
-    "cloud_name": "$CLOUDINARY_CLOUD_NAME",
-    "upload_preset": "$CLOUDINARY_UPLOAD_PRESET"
-  },
-  "workflows": {
-    "auto_share_to_main": true,
-    "main_account": "vdutts7"
-  },
+  "name": "gptcapture",
+  "description": "Export your ChatGPT chat data from chatgpt.com - canonical API URL helper and React Router fidelity capture",
+  "author": "vdutts7",
+  "url": "https://github.com/vdutts7/gptcapture",
+  "site": "https://vd7.io/projects",
+  "topics": ["chatgpt", "openai", "browserscript", "bookmarklet", "data-export", "api"],
   "remote": {
-    "_description": "prefer: ssh|https|auto. origin_url: explicit URL. Run .hooks/scripts/set-remote.sh",
-    "_note": "Default ssh so repos created from this template use SSH; matches global url.git@github.com:.insteadOf https://github.com/",
     "prefer": "ssh",
-    "origin_url": null
-  },
-  "hooks": {
-    "em_dash_policy": {
-      "_description": "U+2014 em dash is blocked in pre-commit; use hyphen '-' unless explicitly approved",
-      "_quick_use": {
-        "autofix": "EM_DASH_AUTOFIX=1 git commit ...",
-        "approve_whitelist": "EM_DASH_APPROVE=1 git commit ...",
-        "custom_fixer": "EM_DASH_FIXER=/path/to/fixer.sh git commit ..."
-      }
-    }
+    "origin_url": "git@github.com:vdutts7/gptcapture.git"
   }
 }

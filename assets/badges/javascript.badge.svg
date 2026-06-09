@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="93" height="34" viewBox="0 0 93 34" role="img" aria-label="vanilla JS">
+  <defs>
+    <linearGradient id="glass-pill-ok53h6y2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.78)"/>
+      <stop offset="100%" stop-color="rgba(236,240,245,0.72)"/>
+    </linearGradient>
+    <linearGradient id="glass-gloss-o12c1z5m" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.58)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.00)"/>
+    </linearGradient>
+    <linearGradient id="glass-icon-shade-jxfr08hd" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.55)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.25)"/>
+    </linearGradient>
+    <clipPath id="glass-icon-clip-lwjkzfu1">
+      <rect x="8" y="9" width="16" height="16" rx="4.5" ry="4.5"/>
+    </clipPath>
+  </defs>
+  <g>
+    <rect x="0.75" y="0.75" width="91.5" height="32.5" rx="17" fill="none" stroke="rgba(15,23,42,0.20)" stroke-width="2.2"/>
+    <rect x="0.75" y="0.75" width="91.5" height="32.5" rx="17" fill="none" stroke="rgba(255,255,255,0.30)" stroke-width="0.8"/>
+    <rect x="0.75" y="0.75" width="91.5" height="32.5" rx="17" fill="url(#glass-pill-ok53h6y2)" stroke="rgba(120,130,145,0.45)" stroke-width="1.5"/>
+    <rect x="1.5" y="1.5" width="90" height="16" rx="16" fill="url(#glass-gloss-o12c1z5m)"/>
+    <rect x="1.5" y="1.5" width="90" height="31" rx="16" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1"/>
+    <rect x="8.55" y="9.65" width="16.5" height="16.5" rx="4.5" ry="4.5" fill="rgba(15,23,42,0.22)"/>
+    <rect x="7.75" y="8.75" width="16.5" height="16.5" rx="4.5" ry="4.5" fill="url(#glass-icon-shade-jxfr08hd)" stroke="rgba(148,163,184,0.55)" stroke-width="0.75"/>
+    <image x="8" y="9" width="16" height="16" clip-path="url(#glass-icon-clip-lwjkzfu1)" href="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRjdERjFFIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+SmF2YVNjcmlwdDwvdGl0bGU+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6bTIyLjAzNCAxOC4yNzZjLS4xNzUtMS4wOTUtLjg4OC0yLjAxNS0zLjAwMy0yLjg3My0uNzM2LS4zNDUtMS41NTQtLjU4NS0xLjc5Ny0xLjE0LS4wOTEtLjMzLS4xMDUtLjUxLS4wNDYtLjcwNS4xNS0uNjQ2LjkxNS0uODQgMS41MTUtLjY2LjM5LjEyLjc1LjQyLjk3Ni45IDEuMDM0LS42NzYgMS4wMzQtLjY3NiAxLjc1NS0xLjEyNS0uMjctLjQyLS40MDQtLjYwMS0uNTg2LS43OC0uNjMtLjcwNS0xLjQ2OS0xLjA2NS0yLjgzNC0xLjAzNGwtLjcwNS4wODljLS42NzYuMTY1LTEuMzIuNTI1LTEuNzEgMS4wMDUtMS4xNCAxLjI5MS0uODExIDMuNTQxLjU2OSA0LjQ3MSAxLjM2NSAxLjAyIDMuMzYxIDEuMjQ0IDMuNjE2IDIuMjA1LjI0IDEuMTctLjg3IDEuNTQ1LTEuOTY2IDEuNDEtLjgxMS0uMTgtMS4yNi0uNTg2LTEuNzU1LTEuMzM2bC0xLjgzIDEuMDUxYy4yMS40OC40NS42ODkuODEgMS4xMDkgMS43NCAxLjc1NiA2LjA5IDEuNjY2IDYuODcxLTEuMDA0LjAyOS0uMDkuMjQtLjcwNS4wNzQtMS42NWwuMDQ2LjA2N3ptLTguOTgzLTcuMjQ1aC0yLjI0OGMwIDEuOTM4LS4wMDkgMy44NjQtLjAwOSA1LjgwNSAwIDEuMjMyLjA2MyAyLjM2My0uMTM4IDIuNzExLS4zMy42ODktMS4xOC42MDEtMS41NjYuNDgtLjM5Ni0uMTk2LS41OTctLjQ2Ni0uODMtLjg1NS0uMDYzLS4xMDUtLjExLS4xOTYtLjEyNy0uMTk2bC0xLjgyNSAxLjEyNWMuMzA1LjYzLjc1IDEuMTcyIDEuMzI0IDEuNTE3Ljg1NS41MSAyLjAwNC42NzUgMy4yMDcuNDA1Ljc4My0uMjI2IDEuNDU4LS42OTEgMS44MTEtMS40MTEuNTEtLjkzLjQwMi0yLjA3LjM5Ny0zLjM0Ni4wMTItMi4wNTQgMC00LjEwOSAwLTYuMTc5bC4wMDQtLjA1NnoiLz48L3N2Zz4="/>
+    <text x="31" y="21.8" fill="rgba(255,255,255,0.42)" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="8.5" font-weight="500" letter-spacing="0.1">vanilla JS</text>
+    <text x="31" y="21" fill="#111827" stroke="rgba(255,255,255,0.16)" stroke-width="0.35" paint-order="stroke fill" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace" font-size="8.5" font-weight="500" letter-spacing="0.1">vanilla JS</text>
+  </g>
+</svg>
