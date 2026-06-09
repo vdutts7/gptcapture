@@ -1,0 +1,8 @@
+# Obsolete: the hook no longer uses path/hash rows here.
+#
+# Policy: see .hooks/scripts/check-em-dashes.sh. It only inspects staged files and
+# blocks when the index would increase U+2014 count vs HEAD (renames map old path).
+# Grandfathered content needs no listing.
+#
+# Bypass once (e.g. importing a file that already contains em dashes):
+#   EM_DASH_APPROVE=1 git commit ...

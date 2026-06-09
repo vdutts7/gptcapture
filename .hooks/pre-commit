@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
+[[ "$(git config core.hooksPath 2>/dev/null)" != ".hooks" ]] && git config --local include.path ../.gitconfig
+
+CHECK_EM_DASHES="$ROOT/.hooks/scripts/check-em-dashes.sh"
+CHECK_PYTHON_VENV="$ROOT/.hooks/scripts/check-python-venv.sh"
+CLEARMETA="$ROOT/.hooks/scripts/clearmeta.sh"
+
+# 1: em-dash policy gate
+if [[ -x "$CHECK_EM_DASHES" ]]; then
+    "$CHECK_EM_DASHES"
+fi
+
+# 2: block staging inside Python venv / Conda env (any folder name)
+if [[ -x "$CHECK_PYTHON_VENV" ]]; then
+    "$CHECK_PYTHON_VENV"
+fi
+
+# 3: metadata strip
+if [[ -x "$CLEARMETA" ]]; then
+    staged=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null)
+    if [[ -n "$staged" ]]; then
+        while IFS= read -r f; do
+            [[ -f "$f" && "$f" != ".git/"* ]] && "$CLEARMETA" -q "$f" 2>/dev/null && git add "$f" 2>/dev/null || true
+        done <<< "$staged"
+        echo "[pre-commit] metadata stripped"
+    fi
+fi

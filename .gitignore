@@ -1,0 +1,65 @@
+# OS
+.DS_Store
+._*
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Deps
+node_modules/
+venv/
+__pycache__/
+
+# Build
+dist/
+build/
+*.o
+*.so
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+
+# Coverage
+coverage/
+.nyc_output/
+
+# AI/Agentic
+.cursor/*
+.claude/*
+.codeium/*
+.windsurf/*
+.gemini/*
+.antigravity/*
+.agy/*
+.kiro/*
+.qoder/*
+.warp/*
+.codex/*
+.void-editor/*
+.amazonq/*
+.roo/*
+.cline*
+
+# Workflows
+_0
+_archive/
+_artifacts/
+_plans/
+*.timeline.json
+!.github/templates/timeline.template.json

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -eo pipefail
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
+[[ "$(git config core.hooksPath 2>/dev/null)" != ".hooks" ]] && git config --local include.path ../.gitconfig
+
+# Gate push behind Touch ID when shelllock is available (AI agents cannot bypass).
+if command -v shelllock &>/dev/null && [[ "${SHELLLOCK_VERIFIED:-}" != "1" ]]; then
+  shelllock -m "Push to remote?" true || { echo "🪝 pre-push: BLOCKED — Touch ID denied"; exit 1; }
+fi
+
+HEALTH="$ROOT/.hooks/scripts/health-check.sh"
+[[ -x "$HEALTH" ]] && exec "$HEALTH"

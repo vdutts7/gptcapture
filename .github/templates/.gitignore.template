@@ -1,0 +1,586 @@
+# =============================================================================
+# ----------GLOBAL / GENERAL---------------------------------------------------
+# =============================================================================
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Icon?
+Desktop.ini
+# Temp files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+# Log files
+*.log
+logs/
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+# nyc test coverage
+.nyc_output
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+# Bower dependency directory (https://bower.io/)
+bower_components
+# node-waf configuration
+.lock-wscript
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release
+# Dependency directories
+node_modules/
+jspm_packages/
+# TypeScript cache
+*.tsbuildinfo
+# Optional npm cache directory
+.npm
+# Optional eslint cache
+.eslintcache
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+# Optional REPL history
+.node_repl_history
+# Output of 'npm pack'
+*.tgz
+# Yarn Integrity file
+.yarn-integrity
+# dotenv environment variables file
+.env
+.env.test
+.env.production
+.env.local
+.env.development
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+# Next.js build output
+.next
+# Nuxt.js build / generate output
+.nuxt
+dist
+# Gatsby files
+.cache/
+# Storybook build outputs
+.out
+.storybook-out
+# Temporary folders
+tmp/
+temp/
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# =============================================================================
+# ----------PROGRAMMING LANGUAGES----------------------------------------------
+# =============================================================================
+
+# ActionScript
+*.as
+*.swf
+*.swc
+# Ada
+*.ads
+*.adb
+*.ali
+# Assembly
+*.asm
+*.s
+# C
+*.o
+*.a
+*.so
+*.dylib
+*.su
+*.idb
+*.pdb
+*.ilk
+*.meta
+# C++
+*.tlog
+*.lastbuildstate
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+# C#
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+# Clojure
+*.class
+*.clj
+*.cljs
+*.cljc
+*.edn
+# Cobol
+*.cbl
+*.cob
+*.cpy
+# CoffeeScript
+*.coffee
+*.cson
+*.iced
+# ColdFusion
+*.cfm
+*.cfc
+# Crystal
+*.cr
+*.ecr
+*.slang
+# Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+# Elixir
+/_build/
+/deps/
+*.ez
+*.beam
+# Elm
+elm-stuff/
+.repl
+# Erlang
+*.beam
+*.app
+.eunit/
+deps/
+rel/
+*.dump
+# Fortran
+*.mod
+*.smod
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+# Groovy
+*.groovy
+*.gradle
+.gradle
+# Haskell
+*.hi
+*.o
+*.dyn_hi
+*.dyn_o
+dist/
+dist-*/
+cabal-dev/
+*.cabal
+# Java
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+replay_pid*
+# JavaScript
+*.map
+*.min.js
+*.min.css
+# Julia
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+deps/
+docs/build/
+Manifest.toml
+# Kotlin
+*.kt
+*.kts
+# Lisp
+*.elc
+*.el
+*.fasl
+*.dfsl
+*.pfsl
+*.d64fsl
+*.p64fsl
+*.lx64fsl
+*.lx32fsl
+*.dx64fsl
+*.dx32fsl
+*.fx64fsl
+*.fx32fsl
+*.sx64fsl
+*.sx32fsl
+*.ax64fsl
+*.ax32fsl
+# Lua
+*.luac
+*.lua
+# MATLAB
+*.asv
+*.slx.autosave
+# Nim
+nimcache/
+*.nimc
+# Objective-C
+*.h
+*.m
+*.mm
+# OCaml
+*.cmo
+*.cmi
+*.a
+*.o
+*.cmx
+*.cmxa
+*.cmxs
+# Pascal
+*.dcu
+*.ppu
+*.o
+*.a
+# Perl
+*.pm
+*.t
+*.pl
+*.cgi
+# PHP
+*.php
+*.phtml
+*.php3
+*.php4
+*.php5
+*.phps
+# PowerShell
+*.ps1
+*.psm1
+*.psd1
+# Prolog
+*.pl
+*.pro
+*.P
+# Python
+*.py[cod]
+*$py.class
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+# R
+*.Rhistory
+*.RData
+*.Ruserdata
+.Rproj.user/
+# Ruby
+*.gem
+.ruby-gemset
+.ruby-version
+.bundle/
+vendor/bundle/
+log/
+tmp/
+# Rust
+target/
+# Scala
+*.class
+*.log
+# Scheme
+*.ss
+*.scm
+*.sch
+# Smalltalk
+*.st
+*.cs
+# Swift
+*.swiftpm
+*.xcodeproj/
+*.xcworkspace/
+*.dSYM/
+# Tcl
+*.tcl
+*.tk
+# TypeScript
+*.tsbuildinfo
+# Verilog
+*.v
+*.vh
+*.sv
+*.svh
+# Visual Basic
+*.vb
+*.vbs
+*.vbproj
+*.vbsproj
+# WebAssembly
+*.wasm
+*.wat
+
+# =============================================================================
+# ----------FRAMEWORKS / LIBRARIES---------------------------------------------
+# =============================================================================
+
+# Angular
+.angular/
+.e2e/
+dist/
+# Backbone
+*.min.js
+# Bootstrap
+node_modules/
+dist/
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+# Express
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+# Flask
+*.db
+*.sqlite
+*.sqlite3
+instance/
+.webassets-cache
+# Laravel
+.env
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+# Next.js
+.next/
+out/
+# Rails
+/db/*.sqlite3
+/db/*.sqlite3-*
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+# React
+build/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# Spring Boot
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+# Symfony
+/var/cache/*
+/var/logs/*
+/var/sessions/*
+!var/cache/.gitkeep
+!var/logs/.gitkeep
+!var/sessions/.gitkeep
+# Vue
+dist/
+/node_modules/
+.env.local
+.env.*.local
+
+# =============================================================================
+# ----------DATABASES----------------------------------------------------------
+# =============================================================================
+
+# MongoDB
+*.bson
+# MySQL
+*.myd
+*.myi
+# PostgreSQL
+*.dump
+# Redis
+*.rdb
+*.aof
+# SQLite
+*.db
+*.sqlite
+*.sqlite3
+
+# =============================================================================
+# ----------TOOLS & PLATFORMS--------------------------------------------------
+# =============================================================================
+
+# AWS
+.aws/
+# Azure
+.azure/
+# Kubernetes
+*.kubeconfig
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+# Vagrant
+.vagrant/
+
+# =============================================================================
+# ----------IDE / EDITORS------------------------------------------------------
+# =============================================================================
+
+# VSCode
+.vscode/
+extensions/
+*.code-workspace
+# JetBrains
+.idea/
+*.iml
+*.ipr
+*.iws
+# Eclipse
+.project
+.classpath
+.cproject
+.settings/
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+# Vim
+*.swp
+*.swo
+*~ 
+
+# =============================================================================
+# ----------LARGE FILES--------------------------------------------------------
+# =============================================================================
+
+*.7z
+*.bak
+*.backup
+*.old
+
+# =============================================================================
+# ----------CERTS--------------------------------------------------------------
+# =============================================================================
+
+*.pem
+*.key
+*.crt
+*.csr
+
+# =============================================================================
+# ----------CONFIGS (keep examples)--------------------------------------------
+# =============================================================================
+
+!config.example.json
+!config.example.yml
+!config.example.yaml
+
+# =============================================================================
+# ----------MCP----------------------------------------------------------------
+# =============================================================================
+
+mcp.json
+
+# =============================================================================
+# ----------AGENTIC IDEs, CLIs, etc--------------------------------------------
+# =============================================================================
+
+.cursor/*
+.codeium/*
+.windsurf/*
+.gemini/*
+.antigravity/*
+.agy/*
+.kiro/*
+.qoder/*
+.claude/*
+.warp/*
+.codex/*
+.void-editor/*
+.amazonq/*
+.roo/*
+.cline*
+.superset/*
+.goose/*
+.augment/*
+.junie/*
+.qodo/*
+.zencoder/*
+
+# =============================================================================
+# ----------WORKFLOWS----------------------------------------------------------
+# =============================================================================
+
+_0
+timeline.json
+!templates/TIMELINE.template.json
+TODOs.md
+!templates/TODOs.template.md
