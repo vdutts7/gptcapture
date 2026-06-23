@@ -151,6 +151,13 @@ gunzip -k summer-roadtrip-notes.fidelity.json.gz
 - [ ] browser extension- native canonical url access via host permissions + cookies
   - skips hydration + manual copy-paste dance
 
+## Tools Used
+
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript"/>
+<img src="https://img.shields.io/badge/ChatGPT%20Backend%20API-412991?style=for-the-badge&logo=openai&logoColor=white" alt="ChatGPT Backend API"/>
+
+<br/>
+
 ## Contact
 
 <a href="https://vd7.io"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773910810/readme-badges/readme-badge-vd7.png" alt="vd7.io" height="40" /></a>
