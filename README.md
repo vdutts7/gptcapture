@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/chatgpt.webp" alt="chatgpt" width="80" height="80" />
+  <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/chatgpt.webp?v=1790340717" alt="chatgpt" width="80" height="80" />
 </p>
 <h1 align="center">gptcapture</h1>
 <p align="center">Export your ChatGPT chat data from <a href="https://chatgpt.com">chatgpt.com</a></p>
@@ -13,17 +13,17 @@
     <td valign="top" width="33%">
       ❌ <strong>What ChatGPT export your data gives you:</strong><br/>
       <a href="examples/settings-export.schema.json"><code>examples/settings-export.schema.json</code></a><br/>
-      <img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1781134527/gh-repos/gptcapture/gptcapture-eyecatcher-settings-export.png" alt="settings export skeleton" width="100%" />
+      <img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1781134527/gh-repos/gptcapture/gptcapture-eyecatcher-settings-export.png?v=1790340717" alt="settings export skeleton" width="100%" />
     </td>
     <td valign="top" width="33%">
       ❌ <strong>Copy-paste from browser:</strong><br/>
       <a href="examples/naive-dom-rip.one-turn.txt"><code>examples/naive-dom-rip.one-turn.txt</code></a><br/>
-      <img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1781134526/gh-repos/gptcapture/gptcapture-eyecatcher-dom-rip.png" alt="naive DOM rip skeleton" width="100%" />
+      <img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1781134526/gh-repos/gptcapture/gptcapture-eyecatcher-dom-rip.png?v=1790340717" alt="naive DOM rip skeleton" width="100%" />
     </td>
     <td valign="top" width="33%">
       ✅ <strong>This repo:</strong><br/>
       <a href="examples/gptcanonical.one-turn.json"><code>examples/gptcanonical.one-turn.json</code></a><br/>
-      <img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1781134527/gh-repos/gptcapture/gptcapture-eyecatcher-canonical.png" alt="gptcanonical skeleton" width="100%" />
+      <img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1781134527/gh-repos/gptcapture/gptcapture-eyecatcher-canonical.png?v=1790340717" alt="gptcanonical skeleton" width="100%" />
     </td>
   </tr>
 </table>
@@ -131,11 +131,8 @@ gunzip -k summer-roadtrip-notes.fidelity.json.gz
   - `mapping` tree- `author`, `content.parts`, `metadata`, parent/child links
 
 **`gptcapture`**- Router dump:
-  - `table`:
-    - dehydrated export layer
-    - key = raw stream indices- debug hydration only; not for reading messages
-  - hydrated `loaderData`
   - `serverResponseData` mirrors canonical `mapping` when route resolves
+  - `window.__GPTCAPTURE` available in console for debug inspection post-run
 
 ## ⚠️ Gotchas
 
@@ -143,7 +140,7 @@ gunzip -k summer-roadtrip-notes.fidelity.json.gz
 |---|---|---|---|
 | session cookies expire | refresh `chatgpt.com`; retry on 401 | 7/10 | normal session churn; manual refresh works |
 | canonical URL needs auth | paste in same logged-in browser- not public API | 8/10 | by design; fails logged out or wrong profile |
-| `gptcapture.js` parses inline stream script | may break if ChatGPT changes bootstrap | 4/10 | scrapes page internals- no stable contract |
+| `gptcapture.js` memory scan + network fallback | may break if ChatGPT changes in-memory shape | 6/10 | no stable contract; runtime fingerprint |
 | `_mapping_nodes: 0` | reload chat; re-run after hydration | 6/10 | race with async loader; retry usually works |
 
 ## Next steps
@@ -153,12 +150,12 @@ gunzip -k summer-roadtrip-notes.fidelity.json.gz
 
 ## Tools Used
 
-<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript"/>
-<img src="https://img.shields.io/badge/ChatGPT%20Backend%20API-412991?style=for-the-badge&logo=openai&logoColor=white" alt="ChatGPT Backend API"/>
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black&v=1790340717" alt="JavaScript"/>
 
 <br/>
 
 ## Contact
 
-<a href="https://vd7.io"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773910810/readme-badges/readme-badge-vd7.png" alt="vd7.io" height="40" /></a>
-<a href="https://x.com/vdutts7"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773910817/readme-badges/readme-badge-x.png" alt="/vdutts7" height="40" /></a>
+<a href="https://vd7.io"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773910810/readme-badges/readme-badge-vd7.png?v=1790340717" alt="vd7.io" height="40" /></a>
+<a href="https://x.com/vdutts7"><img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1773910817/readme-badges/readme-badge-x.png?v=1790340717" alt="/vdutts7" height="40" /></a>
+
