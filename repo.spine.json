@@ -1,6 +1,6 @@
 {
   "name": "gptcapture",
-  "description": "Export your ChatGPT chat data from chatgpt.com - canonical API URL helper and React Router fidelity capture",
+  "description": "Export your ChatGPT chat data from chatgpt.com - canonical API URL helper and in-page conversation JSON capture",
   "author": "vdutts7",
   "url": "https://github.com/vdutts7/gptcapture",
   "site": "https://vd7.io/projects",

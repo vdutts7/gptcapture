@@ -10,17 +10,24 @@
 
 <table>
   <tr>
-    <td valign="top" width="33%">
+    <td valign="top"><img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/chatgpt.webp?v=1790340717" width="40" height="40" alt="ChatGPT" /></td>
+    <td valign="top">
       ❌ <strong>What ChatGPT export your data gives you:</strong><br/>
       <a href="examples/settings-export.schema.json"><code>examples/settings-export.schema.json</code></a><br/>
       <img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1781134527/gh-repos/gptcapture/gptcapture-eyecatcher-settings-export.png?v=1790340717" alt="settings export skeleton" width="100%" />
     </td>
-    <td valign="top" width="33%">
+  </tr>
+  <tr>
+    <td valign="top"><img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/chrome.webp?v=1790340717" width="40" height="40" alt="browser" /></td>
+    <td valign="top">
       ❌ <strong>Copy-paste from browser:</strong><br/>
       <a href="examples/naive-dom-rip.one-turn.txt"><code>examples/naive-dom-rip.one-turn.txt</code></a><br/>
       <img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1781134526/gh-repos/gptcapture/gptcapture-eyecatcher-dom-rip.png?v=1790340717" alt="naive DOM rip skeleton" width="100%" />
     </td>
-    <td valign="top" width="33%">
+  </tr>
+  <tr>
+    <td valign="top"><img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/json.webp?v=1790340717" width="40" height="40" alt="JSON" /></td>
+    <td valign="top">
       ✅ <strong>This repo:</strong><br/>
       <a href="examples/gptcanonical.one-turn.json"><code>examples/gptcanonical.one-turn.json</code></a><br/>
       <img src="https://res.cloudinary.com/ddyc1es5v/image/upload/v1781134527/gh-repos/gptcapture/gptcapture-eyecatcher-canonical.png?v=1790340717" alt="gptcanonical skeleton" width="100%" />
@@ -75,7 +82,7 @@
 | path | tool | flow | output |
 |---|---|---|---|
 | A | `gptcanonical.sh` | chat url → backend-api url → paste in logged-in browser | canonical API json (`https://chatgpt.com/backend-api/conversation/7k2m9p4n-a8f3-4c71-b2e6-9d1a5f803c42`) |
-| B | `gptcapture.js` | run on open chat page | `summer-roadtrip-notes.fidelity.json.gz` (router dump) |
+| B | `gptcapture.js` | run on open chat page | `YYYY-MM-DD_gpt_<conversation_id>_<slug>.json` (same shape as gptcanonical) |
 
 ## Setup
 
@@ -95,7 +102,7 @@ Prereqs:
 | path | do this | get this |
 |---|---|---|
 | A | run `gptcanonical.sh` with chat url | json from canonical API (paste backend url in logged-in browser) |
-| B | run `gptcapture.js` on chat page | gzipped fidelity export, then gunzip |
+| B | run `gptcapture.js` on chat page | plain canonical JSON download |
 
 ### Path A · `gptcanonical.sh`
 
@@ -108,11 +115,7 @@ Prereqs:
 
 ```js
 // on chat page https://chatgpt.com/c/3b8e1f6a-92d4-4c05-8f17-6a2e9d704b51
-// auto-downloads summer-roadtrip-notes.fidelity.json.gz
-```
-
-```bash
-gunzip -k summer-roadtrip-notes.fidelity.json.gz
+// auto-downloads 2024-06-10_gpt_3b8e1f6a-92d4-4c05-8f17-6a2e9d704b51_summer-roadtrip-notes.json
 ```
 
 ## Output shapes
@@ -123,16 +126,15 @@ gunzip -k summer-roadtrip-notes.fidelity.json.gz
 | naive DOM rip (one turn) | `examples/naive-dom-rip.one-turn.txt` |
 | gptcanonical (one turn) | `examples/gptcanonical.one-turn.json` |
 | naive DOM rip (full) | `examples/naive-dom-rip.stub.txt` |
-| gptcanonical (full) | `examples/gptcanonical.schema.json` |
-| gptcapture (full) | `examples/gptcapture-fidelity.schema.json` |
+| gptcanonical / gptcapture (full) | `examples/gptcanonical.schema.json` |
 
-**`gptcanonical`**- Conversation object:
+**`gptcanonical` + `gptcapture`**- same Conversation object:
   - `title`, timestamps, `conversation_id`
   - `mapping` tree- `author`, `content.parts`, `metadata`, parent/child links
 
-**`gptcapture`**- Router dump:
-  - `serverResponseData` mirrors canonical `mapping` when route resolves
-  - `window.__GPTCAPTURE` available in console for debug inspection post-run
+**`gptcapture` only**:
+  - filename `YYYY-MM-DD_gpt_<conversation_id>_<slug>.json` (date from `create_time`)
+  - `window.__GPTCAPTURE` in console for debug post-run
 
 ## ⚠️ Gotchas
 
@@ -141,7 +143,7 @@ gunzip -k summer-roadtrip-notes.fidelity.json.gz
 | session cookies expire | refresh `chatgpt.com`; retry on 401 | 7/10 | normal session churn; manual refresh works |
 | canonical URL needs auth | paste in same logged-in browser- not public API | 8/10 | by design; fails logged out or wrong profile |
 | `gptcapture.js` memory scan + network fallback | may break if ChatGPT changes in-memory shape | 6/10 | no stable contract; runtime fingerprint |
-| `_mapping_nodes: 0` | reload chat; re-run after hydration | 6/10 | race with async loader; retry usually works |
+| empty / partial `mapping` | reload chat; re-run after hydration | 6/10 | race with async loader; retry usually works |
 
 ## Next steps
 
