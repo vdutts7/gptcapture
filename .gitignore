@@ -9,8 +9,6 @@ Thumbs.db
 
 # output / test artifacts
 *.zip
-*.fidelity.json
-*.fidelity.json.gz
 _archive/
 _artifacts/
 _plans/
