@@ -90,40 +90,40 @@
             };
         };
 
-        // high-fidelity deliverable
-        const payload = {
-            _exporter: 'gptcapture-fidelity-dynamic',
-            _exported_at: new Date().toISOString(),
-            _source_url: location.href,
-            _route_key: routeKey,
-            _mapping_nodes: foundData.mapping ? Object.keys(foundData.mapping).length : 0,
-            serverResponseData: foundData,
-        };
+        // pure backend-api conversation blob (no fidelity envelope)
+        const json = JSON.stringify(foundData, getReplacer(), 2);
 
-        const json = JSON.stringify(payload, getReplacer(), 2);
-        const fileName = ((foundData.title) || location.pathname.split('/').pop() || 'conversation')
-            .replace(/[^\w\-]+/g, '_')
-            .slice(0, 60);
+        // YYYY-MM-DD_<conversation_id>_<slug>.json (same convention as claudecanonical Saves)
+        const datePrefix = (() => {
+            const t = foundData.create_time;
+            let d;
+            if (typeof t === 'number') d = new Date(t * 1000);
+            else if (typeof t === 'string') d = new Date(/^\d+(\.\d+)?$/.test(t) ? Number(t) * 1000 : t);
+            else d = new Date();
+            return (isNaN(d.getTime()) ? new Date() : d).toISOString().slice(0, 10);
+        })();
+        const cid = foundData.conversation_id
+            || (location.pathname.match(/\/c\/([a-f0-9-]+)/) || [])[1]
+            || 'unknown';
+        const slug = ((foundData.title) || 'untitled')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-|-$/g, '')
+            .slice(0, 60) || 'untitled';
+        const fileName = `${datePrefix}_${cid}_${slug}.json`;
 
-        window.__GPTCAPTURE = { foundData, routeKey, payload, json };
+        window.__GPTCAPTURE = { foundData, routeKey, json, fileName };
 
-        // native gzip compression stream pipeline execution
-        const gzipBuffer = new Uint8Array(
-            await new Response(
-                new Blob([new TextEncoder().encode(json)]).stream().pipeThrough(new CompressionStream('gzip'))
-            ).arrayBuffer()
-        );
-
-        // instantly trigger atomic browser file-storage save op
         const anchor = document.createElement('a');
-        anchor.href = URL.createObjectURL(new Blob([gzipBuffer], { type: 'application/gzip' }));
-        anchor.download = fileName + '.fidelity.json.gz';
+        anchor.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+        anchor.download = fileName;
         document.body.appendChild(anchor);
         anchor.click();
         anchor.remove();
         setTimeout(() => URL.revokeObjectURL(anchor.href), 2000);
 
-        console.log(`[gptcapture] 🟢: ${fileName}.fidelity.json.gz (ripped) | ${json.length}B raw -> ${gzipBuffer.length}B gz | ${payload._mapping_nodes} nodes | window.__GPTCAPTURE`);
+        const nodes = foundData.mapping ? Object.keys(foundData.mapping).length : 0;
+        console.log(`[gptcapture] 🟢: ${fileName} | ${json.length}B | ${nodes} nodes | window.__GPTCAPTURE`);
     } catch (err) {
         console.error('[gptcapture] 🔴 (fucked):', err);
     }
