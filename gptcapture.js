@@ -93,7 +93,7 @@
         // pure backend-api conversation blob (no fidelity envelope)
         const json = JSON.stringify(foundData, getReplacer(), 2);
 
-        // YYYY-MM-DD_<conversation_id>_<slug>.json (same convention as claudecanonical Saves)
+        // YYYY-MM-DD_gpt_<conversation_id>_<slug>.json
         const datePrefix = (() => {
             const t = foundData.create_time;
             let d;
@@ -110,7 +110,7 @@
             .replace(/[^a-z0-9]+/g, '-')
             .replace(/^-|-$/g, '')
             .slice(0, 60) || 'untitled';
-        const fileName = `${datePrefix}_${cid}_${slug}.json`;
+        const fileName = `${datePrefix}_gpt_${cid}_${slug}.json`;
 
         window.__GPTCAPTURE = { foundData, routeKey, json, fileName };
 
