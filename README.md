@@ -4,7 +4,7 @@
 <h1 align="center">gptcapture</h1>
 <p align="center">Export your ChatGPT chat data from <a href="https://chatgpt.com">chatgpt.com</a></p>
 
-
+<p align="center">Related: <a href="https://github.com/vdutts7/geminicapture">geminicapture</a></p>
 
 ---
 
