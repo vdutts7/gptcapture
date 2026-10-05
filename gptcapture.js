@@ -6,13 +6,12 @@
         const seenObjects = new WeakSet();
         let foundData = null;
         let routeKey = null;
+        let accessToken = null;
 
-        // recursive memory crawler
         function scan(obj, depth = 0) {
             if (depth > 8 || !obj || typeof obj !== 'object' || seenObjects.has(obj)) return false;
             seenObjects.add(obj);
 
-            // fingerprint internal chat storage matrix struct
             if (obj.mapping && typeof obj.mapping === 'object') {
                 const keys = Object.keys(obj.mapping);
                 if (keys.length > 0 && obj.mapping[keys[0]].id && 'create_time' in obj) {
@@ -34,7 +33,19 @@
             return false;
         }
 
-        // scan core memory runtime targets
+        async function ensureToken() {
+            if (accessToken) return accessToken;
+            const c1 = new AbortController();
+            const t1 = setTimeout(() => c1.abort(), 5000);
+            const sessionBlob = await fetch('/api/auth/session', { signal: c1.signal });
+            clearTimeout(t1);
+            if (!sessionBlob.ok) throw new Error('Unauthorized');
+            const session = await sessionBlob.json();
+            accessToken = session.accessToken;
+            if (!accessToken) throw new Error('no accessToken');
+            return accessToken;
+        }
+
         const targets = [
             window.__reactRouterContext,
             window.__NEXT_DATA__,
@@ -46,18 +57,10 @@
             if (foundData) break;
         }
 
-        // fallback network path (if DOM context not yet fully hydrated)
         if (!foundData) {
             console.warn('[gptcapture] ⚪️ memory scan blank -> 🟡 network fallback...');
             try {
-                const c1 = new AbortController();
-                const t1 = setTimeout(() => c1.abort(), 5000);
-                const sessionBlob = await fetch('/api/auth/session', { signal: c1.signal });
-                clearTimeout(t1);
-                if (!sessionBlob.ok) throw new Error('Unauthorized');
-                const session = await sessionBlob.json();
-                const token = session.accessToken;
-
+                const token = await ensureToken();
                 const cidMatch = window.location.pathname.match(/\/c\/([a-f0-9-]+)/);
                 if (!cidMatch) throw new Error('🔴 no chat ID found in URL path');
 
@@ -76,7 +79,6 @@
 
         if (!foundData) throw new Error('🔴: CSP blocked OR incomplete hydration state');
 
-        // circular reference safe cloner engine
         const getReplacer = () => {
             const weak = new WeakSet();
             return (key, value) => {
@@ -90,10 +92,8 @@
             };
         };
 
-        // pure backend-api conversation blob (no fidelity envelope)
         const json = JSON.stringify(foundData, getReplacer(), 2);
 
-        // stem = YYYY-MM-DD_gpt_<slug>_<uuid> (matches extension row download)
         const datePrefix = (() => {
             const t = foundData.create_time;
             let d;
@@ -121,9 +121,114 @@
             return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`;
         })();
         const zipName = `${stem}_${stamp}.zip`;
-        const jsonPath = `${stem}/${stem}.json`;
 
-        // minimal zip (deflate-raw via CompressionStream, STORE fallback)
+        function safeName(s, fallback) {
+            const base = String(s || fallback || 'file').replace(/[^\w.\-]+/g, '_');
+            return base.slice(0, 180) || 'file';
+        }
+
+        function parseAssets(data) {
+            const raw = typeof data === 'string' ? data : JSON.stringify(data);
+            const byId = new Map();
+            const inline = [];
+            function addFile(id, meta) {
+                if (!id || typeof id !== 'string') return;
+                const fid = id.startsWith('file-service://') ? id.slice('file-service://'.length) : id;
+                if (!fid.startsWith('file_') && !fid.startsWith('file-')) return;
+                const prev = byId.get(fid) || { id: fid };
+                byId.set(fid, {
+                    ...prev,
+                    ...meta,
+                    id: fid,
+                    name: meta?.name || prev.name || null,
+                    mime: meta?.mime || prev.mime || null,
+                    size: meta?.size ?? prev.size ?? null,
+                    kind: meta?.kind || prev.kind || 'file',
+                });
+            }
+            for (const node of Object.values(data.mapping || {})) {
+                const msg = node && node.message;
+                if (!msg) continue;
+                for (const att of (msg.metadata && msg.metadata.attachments) || []) {
+                    if (att && att.id) {
+                        addFile(att.id, {
+                            name: att.name,
+                            mime: att.mime_type || att.mimeType,
+                            size: att.size,
+                            kind: 'attachment',
+                            library_file_id: att.library_file_id || null,
+                        });
+                    }
+                }
+                for (const part of (msg.content && msg.content.parts) || []) {
+                    if (!part || typeof part !== 'object') continue;
+                    if (typeof part.asset_pointer === 'string' && part.asset_pointer.startsWith('file-service://')) {
+                        addFile(part.asset_pointer.slice('file-service://'.length), {
+                            name: (part.metadata && part.metadata.dalle && 'dalle.png') || 'image.png',
+                            kind: 'image_asset_pointer',
+                        });
+                    }
+                }
+                const ar = msg.metadata && msg.metadata.aggregate_result;
+                if (ar && typeof ar === 'object') {
+                    if (typeof ar.code === 'string' && ar.code.trim()) {
+                        inline.push({
+                            kind: 'python_code',
+                            name: safeName(`python_${ar.run_id || msg.id || 'code'}`, 'python') + '.py',
+                            text: ar.code,
+                        });
+                    }
+                    const streams = (ar.messages || [])
+                        .filter((m) => m && m.message_type === 'stream' && m.text)
+                        .map((m) => m.text)
+                        .join('');
+                    if (streams) {
+                        inline.push({
+                            kind: 'python_stdout',
+                            name: safeName(`python_${ar.run_id || msg.id || 'out'}_stdout`, 'stdout') + '.txt',
+                            text: streams,
+                        });
+                    }
+                    if (typeof ar.final_expression_output === 'string' && ar.final_expression_output.trim()) {
+                        inline.push({
+                            kind: 'python_result',
+                            name: safeName(`python_${ar.run_id || msg.id || 'result'}`, 'result') + '.txt',
+                            text: ar.final_expression_output,
+                        });
+                    }
+                }
+                if (msg.content && msg.content.content_type === 'code') {
+                    const lang = msg.content.language || 'txt';
+                    const body = ((msg.content.parts || []).filter((p) => typeof p === 'string').join('\n') || '').trim();
+                    if (body) {
+                        const ext = /python/i.test(lang) ? 'py' : /json/i.test(lang) ? 'json' : 'txt';
+                        inline.push({
+                            kind: 'code_part',
+                            name: safeName(`code_${msg.id || 'block'}`, 'code') + '.' + ext,
+                            text: body,
+                        });
+                    }
+                }
+            }
+            let m;
+            const FILE_SERVICE_RE = /file-service:\/\/([A-Za-z0-9_-]+)/g;
+            while ((m = FILE_SERVICE_RE.exec(raw))) addFile(m[1], { kind: 'raw_file_service' });
+            const seenInline = new Set();
+            const inlineOut = [];
+            for (const item of inline) {
+                let n = item.name;
+                let i = 1;
+                while (seenInline.has(n)) {
+                    const dot = n.lastIndexOf('.');
+                    n = dot > 0 ? `${n.slice(0, dot)}_${i}${n.slice(dot)}` : `${n}_${i}`;
+                    i++;
+                }
+                seenInline.add(n);
+                inlineOut.push({ ...item, name: n });
+            }
+            return { files: [...byId.values()], inline: inlineOut };
+        }
+
         async function buildZip(entries) {
             const CRC_TABLE = (() => {
                 const t = new Uint32Array(256);
@@ -183,8 +288,71 @@
                 u16(centrals.length), u16(centrals.length), u32(centralDir.length), u32(offset), u16(0)]);
         }
 
-        const zipBytes = await buildZip([{ path: jsonPath, data: json + '\n' }]);
-        window.__GPTCAPTURE = { foundData, routeKey, json, stem, zipName, jsonPath };
+        const assets = parseAssets(foundData);
+        const bag = [{ path: `${stem}/${stem}.json`, data: json + '\n' }];
+        const landed = [];
+        const failed = [];
+
+        if (assets.files.length || assets.inline.length) {
+            console.log(`[gptcapture] 🟡 sidecars: ${assets.files.length} files, ${assets.inline.length} artifacts`);
+            await ensureToken();
+        }
+
+        for (const f of assets.files) {
+            try {
+                const metaR = await fetch(
+                    `/backend-api/files/download/${encodeURIComponent(f.id)}?post_id=&inline=false`,
+                    { headers: { Authorization: `Bearer ${accessToken}`, Accept: 'application/json' } }
+                );
+                if (!metaR.ok) throw new Error(`${metaR.status}`);
+                const meta = await metaR.json();
+                if (!meta || meta.status !== 'success' || !meta.download_url) {
+                    throw new Error('files/download failed');
+                }
+                const base = safeName(meta.file_name || f.name, f.id);
+                let url = meta.download_url;
+                if (url.startsWith('/')) url = location.origin + url;
+                const bytesR = await fetch(url, {
+                    headers: { Authorization: `Bearer ${accessToken}`, Accept: '*/*' },
+                });
+                if (!bytesR.ok) throw new Error(`bytes ${bytesR.status}`);
+                const buf = new Uint8Array(await bytesR.arrayBuffer());
+                if (!buf.byteLength) throw new Error('empty');
+                const key = `files/${base}`;
+                bag.push({ path: `${stem}/${key}`, data: buf });
+                landed.push(key);
+            } catch (e) {
+                failed.push({ id: f.id, name: f.name, error: e.message, kind: 'files' });
+                console.warn('[gptcapture] sidecar file failed:', f.id, e.message);
+            }
+        }
+
+        for (const item of assets.inline || []) {
+            if (!item?.text || !item?.name) continue;
+            const key = `artifacts/${item.name}`;
+            bag.push({ path: `${stem}/${key}`, data: item.text });
+            landed.push(key);
+        }
+
+        const ledger = {
+            conversation_id: cid,
+            title: foundData.title || null,
+            endpoint_meta: '/backend-api/files/download/{file_id}',
+            endpoint_bytes: '/backend-api/estuary/content',
+            files: assets.files,
+            inline: (assets.inline || []).map(x => ({ kind: x.kind, name: x.name, bytes: (x.text || '').length })),
+            landed,
+            failed,
+        };
+        bag.push({ path: `${stem}/_files.json`, data: JSON.stringify(ledger, null, 2) + '\n' });
+        landed.push('_files.json');
+
+        const zipBytes = await buildZip(bag);
+        const nodes = foundData.mapping ? Object.keys(foundData.mapping).length : 0;
+        window.__GPTCAPTURE = {
+            foundData, routeKey, json, stem, zipName,
+            sidecars: { files: assets.files.length, inline: assets.inline.length, landed, failed },
+        };
 
         const anchor = document.createElement('a');
         anchor.href = URL.createObjectURL(new Blob([zipBytes], { type: 'application/zip' }));
@@ -194,7 +362,10 @@
         anchor.remove();
         setTimeout(() => URL.revokeObjectURL(anchor.href), 2000);
 
-        console.log(`[gptcapture] 🟢: ${zipName} → ${jsonPath} | ${json.length}B | ${nodes} nodes | window.__GPTCAPTURE`);
+        console.log(
+            `[gptcapture] 🟢: ${zipName} | ${json.length}B json | ${nodes} nodes | ` +
+            `${landed.length} sidecars | ${failed.length} failed | window.__GPTCAPTURE`
+        );
     } catch (err) {
         console.error('[gptcapture] 🔴 (fucked):', err);
     }

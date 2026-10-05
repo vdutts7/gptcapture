@@ -79,7 +79,7 @@
 
 ## Solution
 
-Paste `gptcapture.js` in DevTools on an open chat. Downloads `YYYY-MM-DD_gpt_<slug>_<conversation_id>_<YYYYMMDD-HHMMSS>.zip` containing `<stem>/<stem>.json` (backend conversation shape; see `examples/gptcanonical.schema.json`).
+Paste `gptcapture.js` in DevTools on an open chat. Downloads `YYYY-MM-DD_gpt_<slug>_<conversation_id>_<YYYYMMDD-HHMMSS>.zip` containing `<stem>/<stem>.json` plus `files/` / `artifacts/` / `_files.json` when present (backend conversation shape; see `examples/gptcanonical.schema.json`).
 
 ## Usage
 
@@ -102,7 +102,7 @@ Prereqs: logged into `https://chatgpt.com` on that page. API keys do NOT work he
 
 Conversation object: `title`, timestamps, `conversation_id`, `mapping` tree (`author`, `content.parts`, `metadata`, parent/child links).
 
-Filename: `YYYY-MM-DD_gpt_<slug>_<conversation_id>_<YYYYMMDD-HHMMSS>.zip` (inner path `<stem>/<stem>.json`; date from `create_time`). Debug: `window.__GPTCAPTURE`.
+Filename: `YYYY-MM-DD_gpt_<slug>_<conversation_id>_<YYYYMMDD-HHMMSS>.zip` (inner: `<stem>/<stem>.json`, optional `files/`, `artifacts/`, `_files.json`). Debug: `window.__GPTCAPTURE`.
 
 ## ⚠️ Gotchas
 
