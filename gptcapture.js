@@ -1,36 +1,27 @@
 (async function gptcaptureFidelity() {
     'use strict';
-    console.log('[gptcapture] 🟡 dynamic deep memory scan...');
+    // INV-JS-CRX-PARITY: same payload as gptcapture-crx downloadToDownloads (API body + sidecars zip).
+    console.log('[gptcapture] 🟡 API conversation + sidecars zip...');
 
     try {
-        const seenObjects = new WeakSet();
         let foundData = null;
         let routeKey = null;
         let accessToken = null;
+        let accountId = null;
 
-        function scan(obj, depth = 0) {
-            if (depth > 8 || !obj || typeof obj !== 'object' || seenObjects.has(obj)) return false;
-            seenObjects.add(obj);
+        function workspaceFromToken(tok) {
+            try {
+                const payload = JSON.parse(atob(tok.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+                return payload['https://api.openai.com/auth']?.chatgpt_account_id
+                    || payload.chatgpt_account_id
+                    || null;
+            } catch { return null; }
+        }
 
-            if (obj.mapping && typeof obj.mapping === 'object') {
-                const keys = Object.keys(obj.mapping);
-                if (keys.length > 0 && obj.mapping[keys[0]].id && 'create_time' in obj) {
-                    foundData = obj;
-                    return true;
-                }
-            }
-
-            for (const key of Object.keys(obj)) {
-                try {
-                    if (obj[key] && typeof obj[key] === 'object') {
-                        if (scan(obj[key], depth + 1)) {
-                            if (key.length === 36) routeKey = key;
-                            return true;
-                        }
-                    }
-                } catch { /* swallow inaccessible props */ }
-            }
-            return false;
+        function authHeaders(extra) {
+            const h = { Authorization: `Bearer ${accessToken}`, Accept: 'application/json', ...(extra || {}) };
+            if (accountId) h['ChatGPT-Account-Id'] = accountId;
+            return h;
         }
 
         async function ensureToken() {
@@ -43,56 +34,62 @@
             const session = await sessionBlob.json();
             accessToken = session.accessToken;
             if (!accessToken) throw new Error('no accessToken');
+            accountId = workspaceFromToken(accessToken);
             return accessToken;
         }
 
-        const targets = [
-            window.__reactRouterContext,
-            window.__NEXT_DATA__,
-            document.getElementById('__NEXT_DATA__')
-        ].filter(Boolean);
-
-        for (const t of targets) {
-            scan(t);
-            if (foundData) break;
+        function cidFromUrl() {
+            return (location.pathname.match(/\/c\/([a-f0-9-]+)/) || [])[1] || null;
         }
 
-        if (!foundData) {
-            console.warn('[gptcapture] ⚪️ memory scan blank -> 🟡 network fallback...');
-            try {
-                const token = await ensureToken();
-                const cidMatch = window.location.pathname.match(/\/c\/([a-f0-9-]+)/);
-                if (!cidMatch) throw new Error('🔴 no chat ID found in URL path');
-
-                const c2 = new AbortController();
-                const t2 = setTimeout(() => c2.abort(), 5000);
-                const apiBlob = await fetch(`/backend-api/conversation/${cidMatch[1]}`, {
-                    headers: { 'Authorization': `Bearer ${token}` },
-                    signal: c2.signal
-                });
-                clearTimeout(t2);
-                if (apiBlob.ok) foundData = await apiBlob.json();
-            } catch (e) {
-                console.error('[gptcapture] 🔴 network fallback (fucked):', e);
-            }
-        }
-
-        if (!foundData) throw new Error('🔴: CSP blocked OR incomplete hydration state');
-
-        const getReplacer = () => {
-            const weak = new WeakSet();
-            return (key, value) => {
-                if (typeof value === 'undefined') return '__undefined__';
-                if (typeof value === 'number' && !isFinite(value)) return String(value);
-                if (value && typeof value === 'object') {
-                    if (weak.has(value)) return { $ref: '[circular]' };
-                    weak.add(value);
+        function cidFromMemory() {
+            const seen = new WeakSet();
+            let hit = null;
+            function scan(obj, depth) {
+                if (hit || depth > 8 || !obj || typeof obj !== 'object' || seen.has(obj)) return;
+                seen.add(obj);
+                if (obj.mapping && typeof obj.mapping === 'object' && obj.conversation_id) {
+                    const keys = Object.keys(obj.mapping);
+                    if (keys.length && obj.mapping[keys[0]]?.id && 'create_time' in obj) {
+                        hit = String(obj.conversation_id);
+                        return;
+                    }
                 }
-                return value;
-            };
-        };
+                for (const key of Object.keys(obj)) {
+                    try {
+                        if (obj[key] && typeof obj[key] === 'object') {
+                            scan(obj[key], depth + 1);
+                            if (hit && key.length === 36) routeKey = key;
+                        }
+                    } catch { /* inaccessible */ }
+                }
+            }
+            for (const t of [
+                window.__reactRouterContext,
+                window.__NEXT_DATA__,
+                document.getElementById('__NEXT_DATA__'),
+            ].filter(Boolean)) scan(t, 0);
+            return hit;
+        }
 
-        const json = JSON.stringify(foundData, getReplacer(), 2);
+        // Match crx downloadToDownloads: always fetchRaw(cid). Memory is cid recovery only.
+        const cid = cidFromUrl() || cidFromMemory();
+        if (!cid) throw new Error('🔴 open a /c/<uuid> chat first');
+        await ensureToken();
+        {
+            const c2 = new AbortController();
+            const t2 = setTimeout(() => c2.abort(), 20000);
+            const apiBlob = await fetch(`/backend-api/conversation/${cid}`, {
+                headers: authHeaders(),
+                signal: c2.signal,
+            });
+            clearTimeout(t2);
+            if (!apiBlob.ok) throw new Error(`🔴 conversation ${apiBlob.status}`);
+            foundData = await apiBlob.json();
+        }
+        if (!foundData?.mapping) throw new Error('🔴 empty conversation body');
+
+        const json = JSON.stringify(foundData, null, 2);
 
         const datePrefix = (() => {
             const t = foundData.create_time;
@@ -106,15 +103,13 @@
             } else d = new Date();
             return (isNaN(d.getTime()) ? new Date() : d).toISOString().slice(0, 10);
         })();
-        const cid = foundData.conversation_id
-            || (location.pathname.match(/\/c\/([a-f0-9-]+)/) || [])[1]
-            || 'unknown';
+        const chatId = foundData.conversation_id || cid;
         const slug = ((foundData.title) || 'untitled')
             .toLowerCase()
             .replace(/[^a-z0-9]+/g, '-')
             .replace(/^-|-$/g, '')
             .slice(0, 64) || 'untitled';
-        const stem = `${datePrefix}_gpt_${slug}_${cid}`;
+        const stem = `${datePrefix}_gpt_${slug}_${chatId}`;
         const stamp = (() => {
             const d = new Date();
             const p = n => String(n).padStart(2, '0');
@@ -133,7 +128,10 @@
             const inline = [];
             function addFile(id, meta) {
                 if (!id || typeof id !== 'string') return;
-                const fid = id.startsWith('file-service://') ? id.slice('file-service://'.length) : id;
+                let fid = id;
+                for (const pref of ['file-service://', 'sediment://']) {
+                    if (fid.startsWith(pref)) fid = fid.slice(pref.length);
+                }
                 if (!fid.startsWith('file_') && !fid.startsWith('file-')) return;
                 const prev = byId.get(fid) || { id: fid };
                 byId.set(fid, {
@@ -162,8 +160,8 @@
                 }
                 for (const part of (msg.content && msg.content.parts) || []) {
                     if (!part || typeof part !== 'object') continue;
-                    if (typeof part.asset_pointer === 'string' && part.asset_pointer.startsWith('file-service://')) {
-                        addFile(part.asset_pointer.slice('file-service://'.length), {
+                    if (typeof part.asset_pointer === 'string') {
+                        addFile(part.asset_pointer, {
                             name: (part.metadata && part.metadata.dalle && 'dalle.png') || 'image.png',
                             kind: 'image_asset_pointer',
                         });
@@ -211,8 +209,8 @@
                 }
             }
             let m;
-            const FILE_SERVICE_RE = /file-service:\/\/([A-Za-z0-9_-]+)/g;
-            while ((m = FILE_SERVICE_RE.exec(raw))) addFile(m[1], { kind: 'raw_file_service' });
+            const FILE_PTR_RE = /(?:file-service|sediment):\/\/([A-Za-z0-9_-]+)/g;
+            while ((m = FILE_PTR_RE.exec(raw))) addFile(m[1], { kind: 'raw_file_pointer' });
             const seenInline = new Set();
             const inlineOut = [];
             for (const item of inline) {
@@ -295,14 +293,13 @@
 
         if (assets.files.length || assets.inline.length) {
             console.log(`[gptcapture] 🟡 sidecars: ${assets.files.length} files, ${assets.inline.length} artifacts`);
-            await ensureToken();
         }
 
         for (const f of assets.files) {
             try {
                 const metaR = await fetch(
                     `/backend-api/files/download/${encodeURIComponent(f.id)}?post_id=&inline=false`,
-                    { headers: { Authorization: `Bearer ${accessToken}`, Accept: 'application/json' } }
+                    { headers: authHeaders() }
                 );
                 if (!metaR.ok) throw new Error(`${metaR.status}`);
                 const meta = await metaR.json();
@@ -312,9 +309,7 @@
                 const base = safeName(meta.file_name || f.name, f.id);
                 let url = meta.download_url;
                 if (url.startsWith('/')) url = location.origin + url;
-                const bytesR = await fetch(url, {
-                    headers: { Authorization: `Bearer ${accessToken}`, Accept: '*/*' },
-                });
+                const bytesR = await fetch(url, { headers: authHeaders({ Accept: '*/*' }) });
                 if (!bytesR.ok) throw new Error(`bytes ${bytesR.status}`);
                 const buf = new Uint8Array(await bytesR.arrayBuffer());
                 if (!buf.byteLength) throw new Error('empty');
@@ -335,7 +330,7 @@
         }
 
         const ledger = {
-            conversation_id: cid,
+            conversation_id: chatId,
             title: foundData.title || null,
             endpoint_meta: '/backend-api/files/download/{file_id}',
             endpoint_bytes: '/backend-api/estuary/content',
