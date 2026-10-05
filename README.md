@@ -79,13 +79,13 @@
 
 ## Solution
 
-Paste `gptcapture.js` in DevTools on an open chat. Downloads `YYYY-MM-DD_gpt_<conversation_id>_<slug>.json` (backend conversation shape; see `examples/gptcanonical.schema.json`).
+Paste `gptcapture.js` in DevTools on an open chat. Downloads `YYYY-MM-DD_gpt_<slug>_<conversation_id>_<YYYYMMDD-HHMMSS>.zip` containing `<stem>/<stem>.json` (backend conversation shape; see `examples/gptcanonical.schema.json`).
 
 ## Usage
 
 ```js
 // on chat page https://chatgpt.com/c/3b8e1f6a-92d4-4c05-8f17-6a2e9d704b51
-// auto-downloads 2024-06-10_gpt_3b8e1f6a-92d4-4c05-8f17-6a2e9d704b51_summer-roadtrip-notes.json
+// auto-downloads 2024-06-10_gpt_summer-roadtrip-notes_3b8e1f6a-92d4-4c05-8f17-6a2e9d704b51_20240610-153012.zip
 ```
 
 Prereqs: logged into `https://chatgpt.com` on that page. API keys do NOT work here.
@@ -102,7 +102,7 @@ Prereqs: logged into `https://chatgpt.com` on that page. API keys do NOT work he
 
 Conversation object: `title`, timestamps, `conversation_id`, `mapping` tree (`author`, `content.parts`, `metadata`, parent/child links).
 
-Filename: `YYYY-MM-DD_gpt_<conversation_id>_<slug>.json` (date from `create_time`). Debug: `window.__GPTCAPTURE`.
+Filename: `YYYY-MM-DD_gpt_<slug>_<conversation_id>_<YYYYMMDD-HHMMSS>.zip` (inner path `<stem>/<stem>.json`; date from `create_time`). Debug: `window.__GPTCAPTURE`.
 
 ## ⚠️ Gotchas
 
