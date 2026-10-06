@@ -291,11 +291,27 @@
         const landed = [];
         const failed = [];
 
+        async function mapPool(items, limit, fn) {
+            const list = Array.isArray(items) ? items : [];
+            if (!list.length) return [];
+            const n = Math.max(1, Math.min(limit || 8, 16));
+            const out = new Array(list.length);
+            let i = 0;
+            async function worker() {
+                while (i < list.length) {
+                    const idx = i++;
+                    out[idx] = await fn(list[idx], idx);
+                }
+            }
+            await Promise.all(Array.from({ length: Math.min(n, list.length) }, worker));
+            return out;
+        }
+
         if (assets.files.length || assets.inline.length) {
             console.log(`[gptcapture] 🟡 sidecars: ${assets.files.length} files, ${assets.inline.length} artifacts`);
         }
 
-        for (const f of assets.files) {
+        await mapPool(assets.files, 8, async (f) => {
             try {
                 const metaR = await fetch(
                     `/backend-api/files/download/${encodeURIComponent(f.id)}?post_id=&inline=false`,
@@ -320,7 +336,7 @@
                 failed.push({ id: f.id, name: f.name, error: e.message, kind: 'files' });
                 console.warn('[gptcapture] sidecar file failed:', f.id, e.message);
             }
-        }
+        });
 
         for (const item of assets.inline || []) {
             if (!item?.text || !item?.name) continue;
